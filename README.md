@@ -15,6 +15,7 @@ Astro + Tailwind CSS, statically built and deployed to GitHub Pages by
 | `npm run preview` | Serve the built output locally |
 | `npm run check` | Astro + TypeScript diagnostics |
 | `npm run icons` | Regenerate `src/data/icons.json` and merge `src/data/skills.json` |
+| `npm run contrast` | Audit every token pair against WCAG AA in both themes (runs in CI) |
 
 ## Layout
 
@@ -22,7 +23,8 @@ Astro + Tailwind CSS, statically built and deployed to GitHub Pages by
 design/            Approved artboards (.dc.html) + the icon generator they came from
 public/            Static assets served as-is
 scripts/
-  build-icons.mjs  Simple Icons + Devicon -> src/data/icons.json, src/data/skills.json
+  build-icons.mjs   Simple Icons + Devicon -> src/data/icons.json, src/data/skills.json
+  check-contrast.mjs Contrast audit over the shipped tokens
 src/
   components/      Nav, Footer, ThemeToggle, TechIcon
   content/         jobs/ and projects/ markdown entries
@@ -42,5 +44,11 @@ recolours everything without a rebuild.
 
 Type: Archivo (display) · IBM Plex Sans (body) · IBM Plex Mono (data and labels),
 self-hosted and preloaded by Astro's font pipeline — no runtime request to Google.
+
+Brand logo colours are computed per theme by `npm run icons`: each mark is kept at
+its true brand colour where that already clears 3:1 against the surface it sits on,
+and blended toward white (dark theme) or black (light theme) only where it does not.
+Polychrome marks that cannot survive a recolour sit on a neutral plate instead.
+`npm run contrast` verifies all of it and runs in CI.
 
 See `PLAN.md` for the full, locked system.

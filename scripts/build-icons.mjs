@@ -9,34 +9,114 @@ const probe = ['PythonAnywhere','Google','Kubernetes','Dialogflow','Amazon','Ass
 console.log('--- PROBE ---');
 for (const p of probe) console.log(' ', p.padEnd(24), byTitle.has(p.toLowerCase()) ? 'YES ' + byTitle.get(p.toLowerCase()).hex : 'no');
 
-// relative luminance -> lift dark brand colors so they read on #0A0A0B
-function lum(hex){
-  const v = [0,2,4].map(i => { const c = parseInt(hex.slice(i,i+2),16)/255; return c<=0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055,2.4); });
-  return 0.2126*v[0] + 0.7152*v[1] + 0.0722*v[2];
-}
-function lift(hex){
-  // blend toward white, preserving hue, until it reads on #0A0A0B
-  let [r,g,b] = [0,2,4].map(i=>parseInt(hex.slice(i,i+2),16));
-  const hx = (a) => a.map(c=>Math.round(c).toString(16).padStart(2,'0')).join('');
-  if (lum(hex) >= 0.22) return '#'+hex;
-  for (let t = 0.05; t <= 1.0001; t += 0.05) {
-    const m = [r,g,b].map(c => c + (255 - c) * t);
-    if (lum(hx(m)) >= 0.22) return '#' + hx(m);
-  }
-  return '#E4E5EA';
+// ---------------------------------------------------------------------------
+// Per-theme brand colours.
+//
+// A brand colour is kept EXACTLY as-is when it already clears 3:1 against the
+// surface it sits on (WCAG 2.2 non-text contrast, which is what a logo is).
+// When it does not, it is blended toward white on the dark theme, or toward
+// black on the light theme, until it passes. Blending preserves hue — an
+// earlier attempt scaled RGB channels instead and turned pandas magenta.
+//
+// Both themes have to be computed. The first version of this file lifted every
+// mark toward white for the dark canvas only, which left 18 of 38 logos
+// invisible once a light theme existed (JavaScript sat at 1.21:1).
+// ---------------------------------------------------------------------------
+
+const SURFACE_DARK = '#161F3C';
+const SURFACE_LIGHT = '#EFF2F7';
+const MIN_RATIO = 3;
+
+const expand = (hex) => {
+  let h = hex.replace('#', '');
+  if (h.length === 3) h = [...h].map((c) => c + c).join('');
+  return h.toLowerCase();
+};
+
+function lum(hex) {
+  const h = expand(hex);
+  const v = [0, 2, 4].map((i) => {
+    const c = parseInt(h.slice(i, i + 2), 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
 }
 
+function ratio(a, b) {
+  const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+/** Blend `hex` toward white or black until it clears MIN_RATIO on `surface`. */
+function fit(hex, surface) {
+  if (ratio(hex, surface) >= MIN_RATIO) return '#' + expand(hex);
+
+  const h = expand(hex);
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const toward = lum(surface) < 0.5 ? 255 : 0;
+  const out = (a) => '#' + a.map((c) => Math.round(c).toString(16).padStart(2, '0')).join('');
+
+  for (let t = 0.02; t <= 1.0001; t += 0.02) {
+    const mixed = out([r, g, b].map((c) => c + (toward - c) * t));
+    if (ratio(mixed, surface) >= MIN_RATIO) return mixed;
+  }
+  return toward === 255 ? '#ffffff' : '#000000';
+}
+
+/** Rewrite every fill in a multi-colour inline SVG for one theme. */
+function fitSvg(svg, surface) {
+  return svg.replace(/fill="(#[0-9A-Fa-f]{3,6})"/g, (_, c) => `fill="${fit(c, surface)}"`);
+}
+
+/** Simple Icons: one path, one brand colour, fitted per theme. */
 const S = (title, label) => {
   const i = byTitle.get(title.toLowerCase());
   if (!i) { console.error('MISSING simple-icon:', title); return null; }
-  return { label: label || i.title, src:'si', path: i.path, color: lift(i.hex), raw:'#'+i.hex };
+  const raw = '#' + i.hex;
+  return {
+    label: label || i.title,
+    src: 'si',
+    path: i.path,
+    dark: fit(raw, SURFACE_DARK),
+    light: fit(raw, SURFACE_LIGHT),
+    raw,
+  };
 };
+
+/**
+ * Devicon: full multi-colour markup.
+ *
+ * Two-or-three-colour marks are refitted per theme like any other. A truly
+ * polychrome mark cannot be — Matplotlib's nine fills span near-black to
+ * near-white, so pushing them all one direction collapses the rainbow into
+ * mud. Those keep their real colours and sit on a neutral plate, which is the
+ * background they were drawn for in the first place.
+ */
+const PLATE_MIN_FILLS = 4;
+
 const D = (dir, file, label) => {
   const p = `node_modules/devicon/icons/${dir}/${file}`;
   if (!fs.existsSync(p)) { console.error('MISSING devicon:', p); return null; }
-  let svg = fs.readFileSync(p,'utf8').replace(/<\?xml[^>]*\?>/,'').replace(/<!--[\s\S]*?-->/g,'').trim();
-  return { label, src:'dv', svg, color:null };
+  const svg = fs.readFileSync(p, 'utf8')
+    .replace(/<\?xml[^>]*\?>/, '')
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .trim();
+
+  const fills = new Set((svg.match(/fill="#[0-9A-Fa-f]{3,6}"/g) || []));
+  if (fills.size >= PLATE_MIN_FILLS) {
+    return { label, src: 'dv', plate: true, svg };
+  }
+
+  return {
+    label,
+    src: 'dv',
+    plate: false,
+    svgDark: fitSvg(svg, SURFACE_DARK),
+    svgLight: fitSvg(svg, SURFACE_LIGHT),
+  };
 };
+
+/** No logo exists — a mono monogram tile. */
 const T = (label, note) => ({ label, src:'txt', note: note||'' });
 
 const groups = [
@@ -68,8 +148,17 @@ const groups = [
 fs.writeFileSync('src/data/icons.json', JSON.stringify(groups, null, 1));
 const n = groups.reduce((a,g)=>a+g.items.length,0);
 console.log(`\nwrote icons.json — ${groups.length} groups, ${n} entries`);
-console.log('lifted colors:');
-groups.forEach(g=>g.items.forEach(i=>{ if(i.src==='si' && i.color.toLowerCase()!==i.raw.toLowerCase()) console.log(`  ${i.label.padEnd(24)} ${i.raw} -> ${i.color}`); }));
+console.log('adjusted brand colours (kept as-is where already legible):');
+for (const g of groups) {
+  for (const i of g.items) {
+    if (i.src !== 'si') continue;
+    const d = i.dark.toLowerCase() !== i.raw.toLowerCase() ? i.dark : '     —     ';
+    const l = i.light.toLowerCase() !== i.raw.toLowerCase() ? i.light : '     —     ';
+    if (d.trim() !== '—' || l.trim() !== '—') {
+      console.log(`  ${i.label.padEnd(22)} ${i.raw}   dark ${d}   light ${l}`);
+    }
+  }
+}
 
 /* ------------------------------------------------------------------ *
  * skills.json — the editorial layer the Stack page actually renders.

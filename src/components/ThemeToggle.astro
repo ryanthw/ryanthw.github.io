@@ -10,8 +10,8 @@
   id="theme-toggle"
   type="button"
   class="toggle"
-  aria-label="Switch colour theme"
-  title="Switch colour theme"
+  aria-label="Switch to light theme"
+  title="Switch to light theme"
 >
   <svg class="icon icon--sun" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
     <circle cx="12" cy="12" r="4"></circle>
@@ -43,20 +43,34 @@
     border-color: var(--accent);
   }
 
-  /* Show the icon for the theme you'd switch *to*. */
-  .icon--sun { display: none; }
-  .icon--moon { display: block; }
+  /* Show the icon for the theme you'd switch *to*: sun while dark, moon while
+     light. The label is kept in sync by the script below. */
+  .icon--sun { display: block; }
+  .icon--moon { display: none; }
 
-  :global([data-theme='light']) .icon--sun { display: block; }
-  :global([data-theme='light']) .icon--moon { display: none; }
+  :global([data-theme='light']) .icon--sun { display: none; }
+  :global([data-theme='light']) .icon--moon { display: block; }
 </style>
 
 <script>
   const KEY = 'rw-theme';
 
+  /** The label has to name the action, not the state, or it lies to a screen reader. */
+  function label(btn: HTMLElement) {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    const text = `Switch to ${next} theme`;
+    btn.setAttribute('aria-label', text);
+    btn.setAttribute('title', text);
+  }
+
   function wire() {
     const btn = document.getElementById('theme-toggle');
-    if (!btn || btn.dataset.wired) return;
+    if (!btn) return;
+
+    label(btn);
+
+    // after-swap replaces the button, so re-wiring is guarded per element.
+    if (btn.dataset.wired) return;
     btn.dataset.wired = 'true';
 
     btn.addEventListener('click', () => {
@@ -68,6 +82,7 @@
       } catch {
         /* private mode — the choice just won't persist */
       }
+      label(btn);
     });
   }
 

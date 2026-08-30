@@ -37,6 +37,10 @@ jobs:
       - name: Type-check
         run: npx astro check
 
+      # Fails the build if any token pair drops below WCAG AA, in either theme.
+      - name: Contrast audit
+        run: npm run contrast
+
       # `site` is pinned in astro.config.mjs, so the build needs no env here.
       - name: Build
         run: npm run build

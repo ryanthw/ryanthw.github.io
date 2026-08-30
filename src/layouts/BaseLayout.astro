@@ -42,21 +42,52 @@ const og = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 
     <!--
       Theme resolution must run before first paint, or a light-mode visitor
-      gets a black flash on every navigation. Inline and synchronous on purpose.
+      gets a dark flash on every navigation. Inline and synchronous on purpose.
     -->
     <script is:inline>
       (function () {
-        try {
-          var stored = localStorage.getItem('rw-theme');
-          if (stored === 'light' || stored === 'dark') {
-            document.documentElement.dataset.theme = stored;
-            return;
+        var KEY = 'rw-theme';
+
+        function apply() {
+          var theme;
+          try {
+            theme = localStorage.getItem(KEY);
+          } catch (e) {
+            /* private mode */
           }
-        } catch (e) {
-          /* private mode */
+          if (theme !== 'light' && theme !== 'dark') {
+            theme = window.matchMedia('(prefers-color-scheme: light)').matches
+              ? 'light'
+              : 'dark';
+          }
+          document.documentElement.dataset.theme = theme;
         }
-        document.documentElement.dataset.theme =
-          window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+
+        apply();
+
+        if (!window.__rwThemeBound) {
+          window.__rwThemeBound = true;
+
+          // Astro's view-transition swap calls swapRootAttributes(), which strips
+          // every attribute off <html> and re-applies the incoming document's.
+          // Every page ships the static data-theme="dark", so without this the
+          // chosen theme is wiped on each client-side navigation. after-swap
+          // fires before paint, so re-applying here costs no flash.
+          document.addEventListener('astro:after-swap', apply);
+
+          // Follow the OS only while the visitor has made no explicit choice.
+          window
+            .matchMedia('(prefers-color-scheme: light)')
+            .addEventListener('change', function () {
+              var stored = null;
+              try {
+                stored = localStorage.getItem(KEY);
+              } catch (e) {
+                /* private mode */
+              }
+              if (stored !== 'light' && stored !== 'dark') apply();
+            });
+        }
       })();
     </script>
 

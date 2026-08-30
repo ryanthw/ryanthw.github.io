@@ -1,10 +1,15 @@
 @import "tailwindcss";
 
 /*
-  Design system — LOCKED 2026-08-30 (see PLAN.md §"Design system").
-  Dark is the designed default; the light palette is a derived counterpart
-  built from the same semantic roles. Do not add raw hex values in components —
-  always go through a token.
+  Design system. Dark is the designed default; the light palette is a derived
+  counterpart built from the same semantic roles. Do not add raw hex values in
+  components — always go through a token.
+
+  Canvas revised 2026-08-30 from neutral near-black (#0A0A0B) to GT navy
+  (#0B1328) at Ryan's request. Georgia Tech's brand is navy + gold, so this
+  ties the accent to the institution rather than leaving it a lone highlight.
+  Every foreground role was re-derived to clear WCAG AA (4.5:1) against BOTH
+  --canvas and --surface; see the session 3 close-out in PLAN.md for the table.
 */
 
 @custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
@@ -13,31 +18,33 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --canvas:   #0A0A0B;  /* page background                        */
-  --surface:  #141416;  /* raised card / tile                     */
-  --hairline: #232326;  /* 1px dividers — used instead of boxes   */
-  --text:     #EDEDEF;  /* headings, primary text                 */
-  --prose:    #B8B8BE;  /* body paragraphs                        */
-  --muted:    #8A8A93;  /* eyebrows, labels, dates                */
-  --faint:    #5C5C64;  /* footer meta, placeholders              */
+  --canvas:   #0B1328;  /* page background — GT navy, not neutral */
+  --surface:  #161F3C;  /* raised card / tile                     */
+  --hairline: #26314F;  /* 1px dividers — used instead of boxes   */
+  --text:     #EDEEF2;  /* headings, primary text                 */
+  --prose:    #B7BCCB;  /* body paragraphs                        */
+  --muted:    #8F96AC;  /* eyebrows, labels, dates                */
+  --faint:    #828A9F;  /* footer meta, placeholders              */
   --accent:   #B3A369;  /* GT gold — emphasis / active / primary  */
-  --on-accent:#0A0A0B;  /* text on a filled accent surface        */
-  --monogram-border: #2E2E33; /* monogram tiles on the Stack grid  */
+  --on-accent:#0B1328;  /* text on a filled accent surface        */
+  --monogram-border: #37456B; /* monogram tiles on the Stack grid */
+  --icon-plate: #E8EAF0;      /* backing for polychrome logos            */
 }
 
 [data-theme="light"] {
   color-scheme: light;
 
-  --canvas:   #FBFBF9;
-  --surface:  #F3F3F0;
-  --hairline: #E3E3DE;
-  --text:     #16161A;
-  --prose:    #3A3A42;
-  --muted:    #5F5F68;
-  --faint:    #83838C;
-  --accent:   #7A6B38;  /* gold darkened to clear 4.5:1 on light  */
-  --on-accent:#FBFBF9;
-  --monogram-border: #D6D6D0;
+  --canvas:   #F9FAFC;
+  --surface:  #EFF2F7;
+  --hairline: #DDE2EC;
+  --text:     #10131A;
+  --prose:    #384252;
+  --muted:    #5A6377;
+  --faint:    #646B7A;
+  --accent:   #75662F;  /* gold darkened to clear 4.5:1 on light  */
+  --on-accent:#F9FAFC;
+  --monogram-border: #C9D0DD;
+  --icon-plate: #FFFFFF;
 }
 
 /* `inline` keeps the var reference live at the use site, so a theme swap on
