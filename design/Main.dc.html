@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+    *{box-sizing:border-box}
+    body{margin:0;background:#0A0A0B;color:#EDEDEF;font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#EDEDEF;text-decoration:none}
+    a:hover{color:#B3A369}
+  </style>
+</helmet>
+
+<div style="min-height:1180px;background:#0A0A0B;padding-bottom:80px">
+
+  <!-- nav -->
+  <div style="border-bottom:1px solid #232326">
+    <div style="max-width:1120px;margin:0 auto;padding:0 40px;height:68px;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:Archivo,sans-serif;font-weight:800;font-size:15px;letter-spacing:-.01em">RW<span style="color:#B3A369">.</span></div>
+      <div style="display:flex;gap:30px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8A8A93">
+        <a href="#" style="color:#EDEDEF">Home</a>
+        <a href="#">Stack</a>
+        <a href="#">Experience</a>
+        <a href="#">Education</a>
+        <a href="#">Projects</a>
+        <a href="#">Connect</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- hero -->
+  <div style="max-width:1120px;margin:0 auto;padding:0 40px">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:56px;align-items:end;padding-top:88px;padding-bottom:44px">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93;display:flex;align-items:center;gap:10px">
+          <span style="width:5px;height:5px;border-radius:50%;background:#B3A369;display:inline-block"></span>
+          Software Engineer &nbsp;·&nbsp; Atlanta, GA
+        </div>
+        <h1 style="font-family:Archivo,sans-serif;font-weight:800;font-size:92px;line-height:.92;letter-spacing:-.035em;margin:0;text-transform:uppercase">Ryan<br>Walker</h1>
+        <p style="margin:0;max-width:52ch;font-size:18px;line-height:1.62;color:#B8B8BE">
+          CS at Georgia Tech, building at the seam between systems and markets — cloud
+          infrastructure at Sonatype, and a production options-risk platform of my own.
+        </p>
+        <div style="display:flex;gap:12px;padding-top:6px">
+          <a href="#" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:#B3A369;color:#0A0A0B;padding:11px 20px;border-radius:2px;font-weight:600">View Projects</a>
+          <a href="#" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:1px solid #232326;color:#EDEDEF;padding:11px 20px;border-radius:2px">Résumé ↓</a>
+        </div>
+      </div>
+      <div style="width:260px;height:300px;background:#141416;border:1px solid #232326;border-radius:3px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+        <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(179,163,105,.10),transparent 62%)"></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#5C5C64;position:relative">Headshot.PNG</span>
+      </div>
+    </div>
+
+    <!-- stat strip -->
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #232326;border-bottom:1px solid #232326">
+      <div style="padding:22px 0;display:flex;flex-direction:column;gap:5px">
+        <span style="font-family:Archivo,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em">Georgia Tech</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A8A93">BS Computer Science · 2028</span>
+      </div>
+      <div style="padding:22px 0 22px 28px;border-left:1px solid #232326;display:flex;flex-direction:column;gap:5px">
+        <span style="font-family:Archivo,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em;color:#B3A369">4.00</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A8A93">Cumulative GPA</span>
+      </div>
+      <div style="padding:22px 0 22px 28px;border-left:1px solid #232326;display:flex;flex-direction:column;gap:5px">
+        <span style="font-family:Archivo,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em">Fintech</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A8A93">Minor · Info/Intelligence</span>
+      </div>
+      <div style="padding:22px 0 22px 28px;border-left:1px solid #232326;display:flex;flex-direction:column;gap:5px">
+        <span style="font-family:Archivo,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em">Atlanta</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A8A93">Georgia, USA</span>
+      </div>
+    </div>
+
+    <!-- featured -->
+    <div style="padding-top:64px;display:flex;flex-direction:column;gap:26px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Selected Work</div>
+        <a href="#" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B3A369">All projects →</a>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+
+        <div style="background:#141416;border:1px solid #232326;border-radius:3px;padding:24px;display:flex;flex-direction:column;gap:14px;min-height:250px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:#B3A369">_01</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#5C5C64">Live</span>
+          </div>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:22px;letter-spacing:-.015em;line-height:1.15">Options Risk Dashboard</h3>
+          <p style="margin:0;font-size:14px;color:#8A8A93;line-height:1.55;flex-grow:1">Ten-module platform tracking concentration, tail risk and Greeks across a live options book.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:3px 8px">React</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:3px 8px">TypeScript</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:3px 8px">Supabase</span>
+          </div>
+        </div>
+
+        <div style="background:#141416;border:1px solid #232326;border-radius:3px;padding:24px;display:flex;flex-direction:column;gap:14px;min-height:250px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:#B3A369">_02</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#5C5C64">Summer 2026</span>
+          </div>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:22px;letter-spacing:-.015em;line-height:1.15">Sonatype — SWE Intern</h3>
+          <p style="margin:0;font-size:14px;color:#8A8A93;line-height:1.55;flex-grow:1">Migrated Lifecycle infrastructure from EKS to ECS Fargate and managed AWS estate with Terraform.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:3px 8px">AWS</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:3px 8px">Terraform</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:3px 8px">ECS</span>
+          </div>
+        </div>
+
+        <div style="background:#141416;border:1px solid #232326;border-radius:3px;padding:24px;display:flex;flex-direction:column;gap:14px;min-height:250px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:#B3A369">_03</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#5C5C64">PyTorch</span>
+          </div>
+          <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:22px;letter-spacing:-.015em;line-height:1.15">TCN Stock Model</h3>
+          <p style="margin:0;font-size:14px;color:#8A8A93;line-height:1.55;flex-grow:1">Temporal convolutional network forecasting price series, with trained AAPL and TSLA checkpoints.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:3px 8px">PyTorch</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:3px 8px">NumPy</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:3px 8px">YFinance</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,94 @@
+{
+ "artboards": [
+  {
+   "file": "System.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1120,
+   "h": 1420,
+   "title": "Design System"
+  },
+  {
+   "file": "Main.dc.html",
+   "x": 1240,
+   "y": 0,
+   "w": 1440,
+   "h": 1180,
+   "title": "Home"
+  },
+  {
+   "file": "Stack.dc.html",
+   "x": 4360,
+   "y": 0,
+   "w": 1440,
+   "h": 1720,
+   "title": "Stack \u2014 logos, 49 technologies"
+  },
+  {
+   "file": "Experience.dc.html",
+   "x": 2800,
+   "y": 0,
+   "w": 1440,
+   "h": 1580,
+   "title": "Experience \u2014 click to expand"
+  },
+  {
+   "file": "Projects.dc.html",
+   "x": 0,
+   "y": 1780,
+   "w": 1440,
+   "h": 1420,
+   "title": "Projects \u2014 filter chips work"
+  },
+  {
+   "file": "ProjectDetail.dc.html",
+   "x": 1560,
+   "y": 1780,
+   "w": 1440,
+   "h": 1700,
+   "title": "Project Detail \u2014 Risk Dashboard"
+  },
+  {
+   "file": "Education.dc.html",
+   "x": 3120,
+   "y": 1780,
+   "w": 1440,
+   "h": 1560,
+   "title": "Education"
+  },
+  {
+   "file": "Connect.dc.html",
+   "x": 0,
+   "y": 3620,
+   "w": 1440,
+   "h": 900,
+   "title": "Connect"
+  }
+ ],
+ "annotations": [
+  {
+   "id": "note-flow",
+   "x": 1560,
+   "y": 3620,
+   "w": 420,
+   "text": "Nav order: Home \u00b7 Stack \u00b7 Experience \u00b7 Education \u00b7 Projects \u00b7 Connect.\n\nStack page is not mocked yet \u2014 it is the same grouped-chip pattern as the Stack block on the Experience cards, one section per category."
+  },
+  {
+   "id": "note-evidence",
+   "x": 2040,
+   "y": 3620,
+   "w": 420,
+   "text": "Every dark placeholder rectangle is a screenshot slot.\n\nDashboard captures come from a seeded demo account, never the live book."
+  },
+  {
+   "id": "note-icons",
+   "x": 2520,
+   "y": 3620,
+   "w": 440,
+   "text": "Logos: Simple Icons (single-path, recolorable) + Devicon for Java, MATLAB, Matplotlib and AWS, which Simple Icons dropped over trademark requests.\n\nBrand colors too dark to read on #0A0A0B are blended toward white until they pass, preserving hue.\n\nSeven entries have no logo anywhere and use monogram tiles instead."
+  }
+ ],
+ "launch": {
+  "view": "canvas"
+ }
+}

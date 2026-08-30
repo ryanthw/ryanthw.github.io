@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+    *{box-sizing:border-box}
+    body{margin:0;background:#0A0A0B;color:#EDEDEF;font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#EDEDEF;text-decoration:none}
+    a:hover{color:#B3A369}
+  </style>
+</helmet>
+
+<div style="min-height:1700px;background:#0A0A0B;padding-bottom:80px">
+
+  <div style="border-bottom:1px solid #232326">
+    <div style="max-width:1120px;margin:0 auto;padding:0 40px;height:68px;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:Archivo,sans-serif;font-weight:800;font-size:15px;letter-spacing:-.01em">RW<span style="color:#B3A369">.</span></div>
+      <div style="display:flex;gap:30px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8A8A93">
+        <a href="#">Home</a><a href="#">Stack</a><a href="#">Experience</a><a href="#">Education</a><a href="#" style="color:#EDEDEF">Projects</a><a href="#">Connect</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1120px;margin:0 auto;padding:0 40px">
+
+    <div style="padding-top:44px">
+      <a href="#" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8A8A93">← All projects</a>
+    </div>
+
+    <div style="padding-top:26px;padding-bottom:34px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;gap:10px;align-items:center">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#B3A369">Quant</span>
+        <span style="color:#333338">·</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8A8A93">2024 — Present</span>
+      </div>
+      <h1 style="font-family:Archivo,sans-serif;font-weight:800;font-size:58px;line-height:1;letter-spacing:-.032em;margin:0;text-transform:uppercase">Options Risk<br>Dashboard</h1>
+      <p style="margin:0;max-width:62ch;font-size:17px;line-height:1.62;color:#B8B8BE">
+        A ten-module platform sitting over a live options book — tracking concentration, tail risk,
+        Greeks and realised performance, so position sizing is driven by measurement rather than feel.
+      </p>
+      <div style="display:flex;gap:12px;padding-top:4px">
+        <a href="#" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:#B3A369;color:#0A0A0B;padding:10px 18px;border-radius:2px;font-weight:600">Live demo ↗</a>
+        <a href="#" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:1px solid #232326;color:#EDEDEF;padding:10px 18px;border-radius:2px">GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- primary shot -->
+    <div style="height:400px;background:#0F0F11;border:1px solid #232326;border-radius:3px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:linear-gradient(140deg,rgba(179,163,105,.08),transparent 55%)"></div>
+      <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:7px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#5C5C64">Dashboard — net liquidity vs. high-water mark</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#3E3E45">Demo account · seeded data</span>
+      </div>
+    </div>
+
+    <!-- metrics -->
+    <div style="padding-top:44px;display:flex;flex-direction:column;gap:18px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">What it measures</div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#232326;border:1px solid #232326;border-radius:3px;overflow:hidden">
+        <sc-for list="{{metrics}}" as="m" hint-placeholder-count="8">
+          <div style="background:#141416;padding:18px 16px;display:flex;flex-direction:column;gap:6px;min-height:104px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#B3A369">{{m.k}}</span>
+            <span style="font-size:13px;color:#8A8A93;line-height:1.5">{{m.d}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- build -->
+    <div style="padding-top:46px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px">
+      <div style="display:flex;flex-direction:column;gap:26px">
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">The problem</span>
+          <p style="margin:0;font-size:15px;color:#B8B8BE;line-height:1.68">Running a multi-leg options book off a broker screen means you can see every position and none of the portfolio. Concentration, correlated tail exposure and the rate at which theta is actually paying were all invisible at the level that matters.</p>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">What I built</span>
+          <p style="margin:0;font-size:15px;color:#B8B8BE;line-height:1.68">Started as a Streamlit dashboard on a Supabase cloud SQL database, pulling Finnhub and YFinance for live marks. Rebuilt it as a React and TypeScript application on Vercel as the metric set outgrew Streamlit's layout model, and grew it into ten modules — trade analysis, an IV surface, earnings and income scanners, a basis tracker and generated reports.</p>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">What it changed</span>
+          <p style="margin:0;font-size:15px;color:#B8B8BE;line-height:1.68">Position sizing now runs off measured concentration and expiration-bucketed risk rather than intuition, and over-leveraged positions surface before they become the problem. The wheel-strategy rules the book trades were derived from a 104-name, six-year backtest and are paper-tested live against the same dashboard.</p>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Modules</span>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+            <sc-for list="{{modules}}" as="mod" hint-placeholder-count="10">
+              <div style="display:grid;grid-template-columns:14px minmax(0,1fr);gap:8px;align-items:baseline">
+                <span style="color:#B3A369;font-family:'IBM Plex Mono',monospace;font-size:11px">▸</span>
+                <span style="font-size:14px;color:#B8B8BE">{{mod.n}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Stack</span>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <sc-for list="{{stack}}" as="s" hint-placeholder-count="8">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:4px 9px;background:#141416">{{s.n}}</span>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="height:1px;background:#232326"></div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Evidence</span>
+          <div style="height:120px;background:#0F0F11;border:1px solid #232326;border-radius:3px;display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#4A4A52">IV surface</span>
+          </div>
+          <div style="height:120px;background:#0F0F11;border:1px solid #232326;border-radius:3px;display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#4A4A52">Trade analysis</span>
+          </div>
+          <div style="height:120px;background:#0F0F11;border:1px solid #232326;border-radius:3px;display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#4A4A52">Realised track record</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals(){
+    return {
+      metrics: [
+        { k:'TWR', d:'Time-weighted return, stripping out contributions' },
+        { k:'HHI', d:'Herfindahl concentration across the book' },
+        { k:'VaR 95%', d:'Value at risk at the 95th percentile' },
+        { k:'CVaR 95%', d:'Expected shortfall beyond that threshold' },
+        { k:'Sharpe / Sortino', d:'Risk-adjusted return, total and downside' },
+        { k:'Theta / day', d:'Daily decay, absolute and as a share of net liquidity' },
+        { k: 'Beta-wtd Delta', d:'Directional exposure normalised to the index' },
+        { k:'ERPA', d:'Expected return per attempt, with its percentile' }
+      ],
+      modules: [
+        {n:'Dashboard'},{n:'Visuals'},{n:'Strategy'},{n:'History'},{n:'Trade Analysis'},
+        {n:'Earnings Scanner'},{n:'Income Scanner'},{n:'Basis Tracker'},{n:'IV Surface'},{n:'Reports'}
+      ],
+      stack: [
+        {n:'React'},{n:'TypeScript'},{n:'Supabase'},{n:'PostgreSQL'},{n:'Vercel'},
+        {n:'Finnhub API'},{n:'YFinance'},{n:'Python'},{n:'Streamlit'}
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

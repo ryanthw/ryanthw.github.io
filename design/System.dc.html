@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+    *{box-sizing:border-box}
+    body{margin:0;background:#0A0A0B;color:#EDEDEF;font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#EDEDEF;text-decoration:none}
+    a:hover{color:#B3A369}
+  </style>
+</helmet>
+
+<div style="min-height:1420px;background:#0A0A0B;padding:56px 48px">
+  <div style="display:flex;flex-direction:column;gap:44px;max-width:1024px">
+
+    <div style="display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #232326;padding-bottom:22px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8A8A93">Design system</div>
+      <h1 style="font-family:Archivo,sans-serif;font-weight:800;font-size:42px;line-height:1;letter-spacing:-.03em;margin:0;text-transform:uppercase">Tokens &amp; components</h1>
+    </div>
+
+    <!-- palette -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Palette</span>
+      <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px">
+        <sc-for list="{{swatches}}" as="s" hint-placeholder-count="6">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="height:76px;border-radius:3px;border:1px solid #2A2A2E;background:{{s.hex}}"></div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#EDEDEF">{{s.hex}}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8A8A93">{{s.role}}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <span style="font-size:13.5px;color:#5C5C64">One accent, used only for emphasis, active state and primary action. Everything else is neutral.</span>
+    </div>
+
+    <!-- type -->
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Type scale</span>
+      <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid #232326">
+        <sc-for list="{{typeRows}}" as="t" hint-placeholder-count="6">
+          <div style="display:grid;grid-template-columns:190px minmax(0,1fr);gap:28px;padding:16px 0;border-bottom:1px solid #232326;align-items:center">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#B3A369">{{t.name}}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5C5C64">{{t.spec}}</span>
+            </div>
+            <span style="font-family:{{t.family}};font-weight:{{t.weight}};font-size:{{t.size}};letter-spacing:{{t.tracking}};color:#EDEDEF;line-height:1.15;text-transform:{{t.transform}}">{{t.sample}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- components -->
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Components</span>
+
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px">
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#5C5C64">Buttons</span>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:#B3A369;color:#0A0A0B;padding:10px 18px;border-radius:2px;font-weight:600">Primary</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:1px solid #232326;color:#EDEDEF;padding:10px 18px;border-radius:2px">Secondary</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#B3A369;padding:10px 0">Text link →</span>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#5C5C64">Filter chips — rest / active</span>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:7px 14px;border-radius:2px;border:1px solid #B3A369;background:#B3A369;color:#0A0A0B">All</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:7px 14px;border-radius:2px;border:1px solid #232326;background:#141416;color:#8A8A93">Quant</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:7px 14px;border-radius:2px;border:1px solid #232326;background:#141416;color:#8A8A93">ML</span>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#5C5C64">Tech tags</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:4px 9px;background:#141416">React</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:4px 9px;background:#141416">Terraform</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:4px 9px;background:#141416">PyTorch</span>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#5C5C64">Eyebrow &amp; section head</span>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93;display:flex;align-items:center;gap:9px">
+              <span style="width:5px;height:5px;border-radius:50%;background:#B3A369;display:inline-block"></span>Selected work
+            </span>
+            <span style="font-family:Archivo,sans-serif;font-weight:800;font-size:32px;letter-spacing:-.028em;text-transform:uppercase;line-height:1">Section head</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- motion -->
+    <div style="display:flex;flex-direction:column;gap:14px;border-top:1px solid #232326;padding-top:26px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Motion budget</span>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">
+        <sc-for list="{{motion}}" as="m" hint-placeholder-count="4">
+          <div style="border:1px solid #232326;border-radius:3px;padding:16px;background:#141416;display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#B3A369">{{m.k}}</span>
+            <span style="font-size:13px;color:#8A8A93;line-height:1.5">{{m.v}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <span style="font-size:13.5px;color:#5C5C64">No preloader, no scroll-jacking, no particle fields. Everything disabled under prefers-reduced-motion.</span>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals(){
+    return {
+      swatches: [
+        { hex:'#0A0A0B', role:'Canvas' },
+        { hex:'#141416', role:'Surface' },
+        { hex:'#232326', role:'Hairline' },
+        { hex:'#8A8A93', role:'Muted text' },
+        { hex:'#EDEDEF', role:'Text' },
+        { hex:'#B3A369', role:'GT gold accent' }
+      ],
+      typeRows: [
+        { name:'Display XL', spec:'Archivo 800 · 92/0.92 · -.035em', family:'Archivo, sans-serif', weight:'800', size:'52px', tracking:'-.035em', transform:'uppercase', sample:'Ryan Walker' },
+        { name:'Display', spec:'Archivo 800 · 54/1 · -.03em', family:'Archivo, sans-serif', weight:'800', size:'34px', tracking:'-.03em', transform:'uppercase', sample:'Where I have worked' },
+        { name:'Card title', spec:'Archivo 700 · 22/1.15', family:'Archivo, sans-serif', weight:'700', size:'22px', tracking:'-.015em', transform:'none', sample:'Options Risk Dashboard' },
+        { name:'Body', spec:'IBM Plex Sans 400 · 15/1.6', family:"'IBM Plex Sans', sans-serif", weight:'400', size:'15px', tracking:'0', transform:'none', sample:'Cloud infrastructure at Sonatype, and a production options-risk platform.' },
+        { name:'Eyebrow', spec:'IBM Plex Mono 500 · 11 · .16em', family:"'IBM Plex Mono', monospace", weight:'500', size:'11px', tracking:'.16em', transform:'uppercase', sample:'Selected work' },
+        { name:'Data', spec:'IBM Plex Mono 400 · 12 · tabular', family:"'IBM Plex Mono', monospace", weight:'400', size:'12px', tracking:'.03em', transform:'none', sample:'CS 4641 · 4.00 · May 2026 — Aug 2026' }
+      ],
+      motion: [
+        { k:'Reveal', v:'8px fade-up on scroll into view, 150ms' },
+        { k:'Hover', v:'Border and text to gold, 120ms' },
+        { k:'Accordion', v:'Height auto, 180ms ease-out' },
+        { k:'Page change', v:'120ms cross-fade' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

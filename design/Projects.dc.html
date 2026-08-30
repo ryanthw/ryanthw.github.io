@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+    *{box-sizing:border-box}
+    body{margin:0;background:#0A0A0B;color:#EDEDEF;font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#EDEDEF;text-decoration:none}
+    a:hover{color:#B3A369}
+  </style>
+</helmet>
+
+<div style="min-height:1420px;background:#0A0A0B;padding-bottom:80px">
+
+  <div style="border-bottom:1px solid #232326">
+    <div style="max-width:1120px;margin:0 auto;padding:0 40px;height:68px;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:Archivo,sans-serif;font-weight:800;font-size:15px;letter-spacing:-.01em">RW<span style="color:#B3A369">.</span></div>
+      <div style="display:flex;gap:30px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8A8A93">
+        <a href="#">Home</a><a href="#">Stack</a><a href="#">Experience</a><a href="#">Education</a><a href="#" style="color:#EDEDEF">Projects</a><a href="#">Connect</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1120px;margin:0 auto;padding:0 40px">
+    <div style="padding-top:64px;padding-bottom:30px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Projects</div>
+      <h1 style="font-family:Archivo,sans-serif;font-weight:800;font-size:54px;line-height:1;letter-spacing:-.03em;margin:0;text-transform:uppercase">Things I've built</h1>
+    </div>
+
+    <div style="display:flex;gap:8px;padding-bottom:26px;flex-wrap:wrap">
+      <sc-for list="{{filters}}" as="f" hint-placeholder-count="5">
+        <span onClick="{{f.pick}}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:7px 14px;border-radius:2px;cursor:pointer;border:1px solid {{f.bd}};background:{{f.bg}};color:{{f.fg}}">{{f.label}}</span>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+      <sc-for list="{{shown}}" as="p" hint-placeholder-count="6">
+        <div style="background:#141416;border:1px solid #232326;border-radius:3px;display:flex;flex-direction:column;overflow:hidden;min-height:330px">
+
+          <div style="height:132px;background:#0F0F11;border-bottom:1px solid #232326;display:flex;align-items:center;justify-content:center;position:relative">
+            <div style="position:absolute;inset:0;background:linear-gradient(150deg,rgba(179,163,105,.09),transparent 60%)"></div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#4A4A52;position:relative">{{p.shot}}</span>
+          </div>
+
+          <div style="padding:20px;display:flex;flex-direction:column;gap:11px;flex-grow:1">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#B3A369">{{p.cat}}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#5C5C64">{{p.year}}</span>
+            </div>
+            <h3 style="font-family:Archivo,sans-serif;font-weight:700;font-size:19px;letter-spacing:-.012em;line-height:1.2">{{p.name}}</h3>
+            <p style="margin:0;font-size:13.5px;color:#8A8A93;line-height:1.55;flex-grow:1">{{p.blurb}}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:5px">
+              <sc-for list="{{p.tech}}" as="t" hint-placeholder-count="3">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.05em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:3px 7px;background:#0A0A0B">{{t.n}}</span>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:14px;padding-top:5px;border-top:1px solid #232326;margin-top:3px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:{{p.linkColor}}">{{p.linkText}}</span>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  constructor(props){ super(props); this.state = { cat: 'All' }; }
+  renderVals(){
+    const cat = this.state.cat;
+    const all = [
+      { name:'Options Risk Dashboard', cat:'Quant', year:'2024 — Present', shot:'demo-account capture',
+        blurb:'Ten-module risk platform over a live options book — concentration, tail risk, Greeks, scanners and an IV surface.',
+        tech:[{n:'React'},{n:'TypeScript'},{n:'Supabase'},{n:'Vercel'}], linkText:'Case study + repo →', linkColor:'#B3A369' },
+      { name:'TCN Stock Model', cat:'ML', year:'2025', shot:'prediction vs actual',
+        blurb:'Temporal convolutional network forecasting price series, with trained AAPL and TSLA checkpoints.',
+        tech:[{n:'PyTorch'},{n:'NumPy'},{n:'YFinance'}], linkText:'Case study →', linkColor:'#B3A369' },
+      { name:'Vyta', cat:'Web', year:'2025', shot:'dashboard screenshot',
+        blurb:'Fitness platform built by a five-person team — Gemini-generated workout plans, progress analytics, leaderboards and a social feed.',
+        tech:[{n:'Django'},{n:'Gemini API'},{n:'Chart.js'}], linkText:'Case study + repo →', linkColor:'#B3A369' },
+      { name:'Strategy Backtests', cat:'Quant', year:'2024 — 2025', shot:'equity curves',
+        blurb:'Wheel, debit spreads, iron condors and a Markov regime indicator, tested across a 104-name, six-year universe.',
+        tech:[{n:'Python'},{n:'Pandas'},{n:'Matplotlib'}], linkText:'Case study →', linkColor:'#B3A369' },
+      { name:'Butterfly CNN', cat:'ML', year:'2025', shot:'training curves',
+        blurb:'Transfer learning on VGG16 to classify 75 butterfly species at 89–90% accuracy, retraining two fully connected layers over 3,000 images.',
+        tech:[{n:'PyTorch'},{n:'VGG16'},{n:'Matplotlib'}], linkText:'Write-up — no repo', linkColor:'#5C5C64' },
+      { name:'Semantic Quote Search', cat:'ML', year:'2025', shot:'query walkthrough',
+        blurb:'Embedding search over a quote corpus — sentence-transformers into a FAISS inner-product index, joined back to a SQLite metadata store.',
+        tech:[{n:'FAISS'},{n:'sentence-transformers'},{n:'SQLite'}], linkText:'Write-up — no repo', linkColor:'#5C5C64' },
+      { name:'Collegiate Cleaners', cat:'Web', year:'2026', shot:'site screenshot',
+        blurb:'Client marketing site built and deployed in Astro.',
+        tech:[{n:'Astro'},{n:'Tailwind'}], linkText:'Live site →', linkColor:'#B3A369' }
+    ];
+
+    const cats = ['All','Quant','ML','Web'];
+    const filters = cats.map((c) => ({
+      label: c,
+      pick: () => this.setState({ cat: c }),
+      bg: cat === c ? '#B3A369' : '#141416',
+      fg: cat === c ? '#0A0A0B' : '#8A8A93',
+      bd: cat === c ? '#B3A369' : '#232326'
+    }));
+
+    const shown = cat === 'All' ? all : all.filter((p) => p.cat === cat);
+    return { filters, shown };
+  }
+}
+</script>
+</body>
+</html>

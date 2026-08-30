@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+*{box-sizing:border-box}
+body{margin:0;background:#0A0A0B;color:#EDEDEF;font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:#EDEDEF;text-decoration:none}
+a:hover{color:#B3A369}
+.wrap{max-width:1120px;margin:0 auto;padding:0 40px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93}
+.gold{color:#B3A369}
+.rule{height:1px;background:#232326;border:0}
+h1,h2,h3{font-family:Archivo,'Helvetica Neue',sans-serif;margin:0;text-wrap:balance}
+.mono{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:4px 9px;background:#141416}

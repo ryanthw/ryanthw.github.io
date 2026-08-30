@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/*
+  Design system — LOCKED 2026-08-30 (see PLAN.md §"Design system").
+  Dark is the designed default; the light palette is a derived counterpart
+  built from the same semantic roles. Do not add raw hex values in components —
+  always go through a token.
+*/
+
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --canvas:   #0A0A0B;  /* page background                        */
+  --surface:  #141416;  /* raised card / tile                     */
+  --hairline: #232326;  /* 1px dividers — used instead of boxes   */
+  --text:     #EDEDEF;  /* headings, primary text                 */
+  --prose:    #B8B8BE;  /* body paragraphs                        */
+  --muted:    #8A8A93;  /* eyebrows, labels, dates                */
+  --faint:    #5C5C64;  /* footer meta, placeholders              */
+  --accent:   #B3A369;  /* GT gold — emphasis / active / primary  */
+  --on-accent:#0A0A0B;  /* text on a filled accent surface        */
+  --monogram-border: #2E2E33; /* monogram tiles on the Stack grid  */
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --canvas:   #FBFBF9;
+  --surface:  #F3F3F0;
+  --hairline: #E3E3DE;
+  --text:     #16161A;
+  --prose:    #3A3A42;
+  --muted:    #5F5F68;
+  --faint:    #83838C;
+  --accent:   #7A6B38;  /* gold darkened to clear 4.5:1 on light  */
+  --on-accent:#FBFBF9;
+  --monogram-border: #D6D6D0;
+}
+
+/* `inline` keeps the var reference live at the use site, so a theme swap on
+   <html> re-colours every utility without rebuilding any CSS. */
+@theme inline {
+  --color-canvas:    var(--canvas);
+  --color-surface:   var(--surface);
+  --color-hairline:  var(--hairline);
+  --color-text:      var(--text);
+  --color-prose:     var(--prose);
+  --color-muted:     var(--muted);
+  --color-faint:     var(--faint);
+  --color-accent:    var(--accent);
+  --color-on-accent: var(--on-accent);
+
+  /* --font-display / --font-body / --font-mono are injected by Astro's font
+     pipeline (see astro.config.mjs) and picked up here as Tailwind families. */
+  --font-sans: var(--font-body), system-ui, "Segoe UI", sans-serif;
+
+  /* 8px spacing scale */
+  --spacing: 0.5rem;
+
+  --container-shell: 1120px;
+
+  /* Motion budget — LOCKED. Nothing outside these three durations. */
+  --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@layer base {
+  html {
+    background: var(--canvas);
+  }
+
+  body {
+    background: var(--canvas);
+    color: var(--text);
+    font-family: var(--font-body), system-ui, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display), "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 120ms var(--ease-out-soft);
+  }
+
+  a:hover { color: var(--accent); }
+
+  /* Real focus rings — an explicit target in the plan. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+}
+
+@layer components {
+  /* Mono eyebrow label — the recurring section marker. */
+  .eyebrow {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Tabular mono, for any figure that should line up column-wise. */
+  .mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Motion budget: 8px fade-up on scroll-in, 150ms. Applied by ../scripts
+   observer; the class is inert until `data-inview` lands. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-animate] {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 150ms var(--ease-out-soft),
+      transform 150ms var(--ease-out-soft);
+  }
+
+  [data-animate][data-inview] {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TechIcon from '../components/TechIcon.astro';
+
+/* Scaffold placeholder. Real home page lands in session 3 — see PLAN.md §6. */
+const proof = ['Astro', 'TypeScript', 'Tailwind CSS', 'GitHub', 'AWS', 'EKS'];
+---
+
+<BaseLayout
+  title="Ryan Walker"
+  description="Third-year CS at Georgia Tech — cloud infrastructure and tooling at Sonatype, and a production options-risk platform."
+>
+  <section class="hero">
+    <p class="eyebrow" data-animate>
+      <span class="dot"></span>Software Engineer &nbsp;·&nbsp; Atlanta, GA
+    </p>
+    <h1 data-animate>Ryan<br />Walker</h1>
+    <p class="lede" data-animate>
+      Third-year CS at Georgia Tech, drawn to work where I own the whole system —
+      cloud infrastructure and tooling at Sonatype, and a production options-risk
+      platform of my own.
+    </p>
+
+    <div class="scaffold" data-animate>
+      <p class="eyebrow">Scaffold · session 2</p>
+      <p>
+        Shell, tokens, fonts, content schemas and the deploy pipeline are in place.
+        Page content lands in sessions 3 and 4.
+      </p>
+      <ul class="marks">
+        {proof.map((label) => <li><TechIcon label={label} /></li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    max-width: var(--container-shell);
+    margin: 0 auto;
+    padding: 88px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-weight: 800;
+    font-size: clamp(52px, 9vw, 92px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+  }
+
+  .lede {
+    margin: 0;
+    max-width: 52ch;
+    font-size: 18px;
+    line-height: 1.62;
+    color: var(--prose);
+  }
+
+  .scaffold {
+    margin-top: 20px;
+    padding-top: 26px;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .scaffold p:not(.eyebrow) {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--prose);
+  }
+
+  .marks {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+  }
+
+  @media (max-width: 860px) {
+    .hero { padding: 56px 24px 32px; }
+  }
+</style>

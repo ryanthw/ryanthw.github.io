@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+    *{box-sizing:border-box}
+    body{margin:0;background:#0A0A0B;color:#EDEDEF;font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#EDEDEF;text-decoration:none}
+    a:hover{color:#B3A369}
+  </style>
+</helmet>
+
+<div style="min-height:900px;background:#0A0A0B;display:flex;flex-direction:column">
+
+  <div style="border-bottom:1px solid #232326">
+    <div style="max-width:1120px;margin:0 auto;padding:0 40px;height:68px;display:flex;align-items:center;justify-content:space-between;width:100%">
+      <div style="font-family:Archivo,sans-serif;font-weight:800;font-size:15px;letter-spacing:-.01em">RW<span style="color:#B3A369">.</span></div>
+      <div style="display:flex;gap:30px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8A8A93">
+        <a href="#">Home</a><a href="#">Stack</a><a href="#">Experience</a><a href="#">Education</a><a href="#">Projects</a><a href="#" style="color:#EDEDEF">Connect</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1120px;margin:0 auto;padding:0 40px;width:100%;flex-grow:1">
+    <div style="padding-top:72px;padding-bottom:40px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Connect</div>
+      <h1 style="font-family:Archivo,sans-serif;font-weight:800;font-size:64px;line-height:.98;letter-spacing:-.034em;margin:0;text-transform:uppercase">Let's talk</h1>
+      <p style="margin:0;max-width:52ch;font-size:17px;color:#B8B8BE;line-height:1.6">
+        Looking for software engineering internships and new-grad roles — particularly where
+        systems work meets quantitative problems.
+      </p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#232326;border:1px solid #232326;border-radius:3px;overflow:hidden">
+      <sc-for list="{{links}}" as="l" hint-placeholder-count="4">
+        <a href="#" style="background:#141416;padding:26px;display:flex;flex-direction:column;gap:8px;min-height:130px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#B3A369">{{l.label}}</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#5C5C64">↗</span>
+          </div>
+          <span style="font-family:Archivo,sans-serif;font-weight:700;font-size:19px;letter-spacing:-.012em">{{l.handle}}</span>
+          <span style="font-size:13.5px;color:#8A8A93;line-height:1.5">{{l.note}}</span>
+        </a>
+      </sc-for>
+    </div>
+
+    <div style="padding-top:36px;display:flex;gap:40px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:#8A8A93">Based in</span>
+        <span style="font-size:15px;color:#B8B8BE">Atlanta, Georgia</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:#8A8A93">Open to</span>
+        <span style="font-size:15px;color:#B8B8BE">Internships · New grad · Remote or relocation</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid #232326;margin-top:56px">
+    <div style="max-width:1120px;margin:0 auto;padding:22px 40px;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5C5C64">
+      <span>© 2026 Ryan Walker</span>
+      <span>Built with Astro · Hosted on GitHub Pages</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals(){
+    return {
+      links: [
+        { label:'GitHub', handle:'github.com/ryanthw', note:'Source for the risk dashboard and this site.' },
+        { label:'LinkedIn', handle:'/in/ryan-walker-gt', note:'Full background and work history.' },
+        { label:'Email', handle:'ryan1walker5@gmail.com', note:'Fastest way to reach me.' },
+        { label:'Résumé', handle:'Ryan_Walker_Resume.pdf', note:'One page, always current.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

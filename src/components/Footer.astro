@@ -1,0 +1,36 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+  <div class="shell">
+    <span>&copy; {year} Ryan Walker</span>
+    <span>Built with Astro · Hosted on GitHub Pages</span>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    border-top: 1px solid var(--hairline);
+    margin-top: 56px;
+  }
+
+  .shell {
+    max-width: var(--container-shell);
+    margin: 0 auto;
+    padding: 22px 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  @media (max-width: 860px) {
+    .shell { padding: 22px 24px; }
+  }
+</style>

@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+    *{box-sizing:border-box}
+    body{margin:0;background:#0A0A0B;color:#EDEDEF;font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#EDEDEF;text-decoration:none}
+    a:hover{color:#B3A369}
+  </style>
+</helmet>
+
+<div style="min-height:1580px;background:#0A0A0B;padding-bottom:80px">
+
+  <div style="border-bottom:1px solid #232326">
+    <div style="max-width:1120px;margin:0 auto;padding:0 40px;height:68px;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:Archivo,sans-serif;font-weight:800;font-size:15px;letter-spacing:-.01em">RW<span style="color:#B3A369">.</span></div>
+      <div style="display:flex;gap:30px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8A8A93">
+        <a href="#">Home</a><a href="#">Stack</a><a href="#" style="color:#EDEDEF">Experience</a><a href="#">Education</a><a href="#">Projects</a><a href="#">Connect</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1120px;margin:0 auto;padding:0 40px">
+    <div style="padding-top:64px;padding-bottom:36px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Experience</div>
+      <h1 style="font-family:Archivo,sans-serif;font-weight:800;font-size:54px;line-height:1;letter-spacing:-.03em;margin:0;text-transform:uppercase">Where I've worked</h1>
+      <p style="margin:0;max-width:58ch;color:#8A8A93;font-size:16px">Four roles, expanded for detail. Each carries what I actually built and the tools I built it with.</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:56px">
+      <sc-for list="{{jobs}}" as="job" hint-placeholder-count="4">
+        <div style="background:#141416;border:1px solid {{job.border}};border-radius:3px;overflow:hidden">
+
+          <div onClick="{{job.toggle}}" style="padding:20px 24px;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:20px;align-items:center;cursor:pointer">
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <span style="font-family:Archivo,sans-serif;font-weight:700;font-size:19px;letter-spacing:-.012em">{{job.role}}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8A8A93">{{job.org}} &nbsp;·&nbsp; {{job.place}}</span>
+            </div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8A8A93;white-space:nowrap">{{job.dates}}</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:15px;color:{{job.caretColor}};width:16px;text-align:center">{{job.caret}}</span>
+          </div>
+
+          <sc-if value="{{job.open}}" hint-placeholder-val="{{ true }}">
+            <div style="padding:0 24px 22px 24px;display:flex;flex-direction:column;gap:16px">
+              <div style="height:1px;background:#232326"></div>
+
+              <sc-for list="{{job.groups}}" as="grp" hint-placeholder-count="2">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#B3A369">{{grp.title}}</span>
+                  <sc-for list="{{grp.points}}" as="pt" hint-placeholder-count="3">
+                    <div style="display:grid;grid-template-columns:14px minmax(0,1fr);gap:8px;align-items:start">
+                      <span style="color:#5C5C64;font-size:14px;line-height:1.6">—</span>
+                      <span style="font-size:14.5px;color:#B8B8BE;line-height:1.6">{{pt.t}}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+
+              <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A8A93">Stack</span>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <sc-for list="{{job.tech}}" as="t" hint-placeholder-count="5">
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:#8A8A93;border:1px solid #232326;border-radius:2px;padding:4px 9px;background:#0A0A0B">{{t.n}}</span>
+                  </sc-for>
+                </div>
+              </div>
+
+              <sc-if value="{{job.noteText}}" hint-placeholder-val="{{ true }}">
+                <div style="border-left:2px solid #B3A369;padding:8px 14px;background:rgba(179,163,105,.06)">
+                  <span style="font-size:13.5px;color:#8A8A93">{{job.noteText}}</span>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- leadership band -->
+    <div style="border-top:1px solid #232326;padding-top:36px;display:flex;flex-direction:column;gap:20px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#8A8A93">Leadership</div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px">
+        <div style="border:1px solid #232326;border-radius:3px;padding:22px;display:flex;flex-direction:column;gap:9px;background:#141416">
+          <span style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;letter-spacing:-.01em">Social Chair — Theta Xi</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8A8A93">Oct 2024 — Present</span>
+          <span style="font-size:14px;color:#8A8A93;line-height:1.55">Manage an ~$18k per-semester budget and a team of assistants across 15+ events a semester, from 80-person mixers to 800-person parties.</span>
+        </div>
+        <div style="border:1px solid #232326;border-radius:3px;padding:22px;display:flex;flex-direction:column;gap:9px;background:#141416">
+          <span style="font-family:Archivo,sans-serif;font-weight:700;font-size:18px;letter-spacing:-.01em">Bible Study Leader — GT Europe</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8A8A93">May — Aug 2025</span>
+          <span style="font-size:14px;color:#8A8A93;line-height:1.55">Organised a weekly study for ~20 students in Metz, wrote the study plan for the book of Acts, and led a small group of five.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  constructor(props){ super(props); this.state = { open: 'sonatype' }; }
+  renderVals(){
+    const open = this.state.open;
+    const raw = [
+      { id:'sonatype', role:'Associate Software Engineering Intern', org:'Sonatype', place:'Remote',
+        dates:'May — Aug 2026',
+        groups:[
+          { title:'Cloud infrastructure', points:[
+            {t:'Played a key role in migrating the Lifecycle product from EKS/Cloudy to ECS Fargate, improving the efficiency and scalability of its cloud footprint.'},
+            {t:'Managed AWS resources extensively with Terraform — deploying, managing and destroying personal instances of the product on ECS to support robust cloud testing inside the SDLC.'}
+          ]},
+          { title:'Observability', points:[
+            {t:'Assisted the transition from Datadog to the Observe platform, migrating and configuring the essential monitors and charts.'}
+          ]},
+          { title:'Team', points:[
+            {t:'Contributed within the SCA team in a sprint-based environment, delivering directly into the Lifecycle product.'}
+          ]}
+        ],
+        tech:[{n:'AWS'},{n:'ECS Fargate'},{n:'EKS'},{n:'Terraform'},{n:'Observe'},{n:'Datadog'},{n:'Java'}],
+        noteText:'Written at a level that stays within what is publicly shareable — no internal architecture, screenshots or source detail.' },
+
+      { id:'ppm', role:'Portfolio Manager', org:'Personal Portfolio Management', place:'Remote',
+        dates:'2024 — Present',
+        groups:[
+          { title:'Risk platform', points:[
+            {t:'Built and hosted a Streamlit risk dashboard on a Supabase cloud SQL database, integrating Finnhub and YFinance for real-time concentration (HHI), risk by expiration, projections and Monte Carlo simulation.'},
+            {t:'Migrated the platform to a React application on Vercel, now spanning ten modules including trade analysis, an IV surface, earnings and income scanners and a basis tracker.'}
+          ]},
+          { title:'Research', points:[
+            {t:'Researched and backtested call credit spreads, put debit spreads, iron condors and the wheel strategy.'},
+            {t:'Ran live paper tests of the wheel over a small-cap universe, governed by entry, exit and screening rules derived from a 104-name, six-year backtest.'},
+            {t:'Used the dashboard analytics to optimise position sizing and surface over-leveraged positions.'}
+          ]}
+        ],
+        tech:[{n:'React'},{n:'TypeScript'},{n:'Python'},{n:'Supabase'},{n:'Vercel'},{n:'Streamlit'},{n:'YFinance'}],
+        noteText:'' },
+
+      { id:'gtic', role:'Junior Analyst', org:'GT Investments Committee', place:'Atlanta, GA',
+        dates:'May 2025 — Present',
+        groups:[
+          { title:'Coverage', points:[
+            {t:'Completed the analyst mentorship programme for a committee managing a $2.7M endowment, then served two semesters covering Media and Telecom.'},
+            {t:'Built primers and pitches on DCF and relative valuation that led directly to trimming one holding and acquiring another.'},
+            {t:'Re-evaluated investment theses on current holdings using business valuation and macro analysis.'}
+          ]}
+        ],
+        tech:[{n:'DCF'},{n:'Relative Valuation'},{n:'Excel'}],
+        noteText:'' },
+
+      { id:'swp', role:'Head Lifeguard', org:'Sweetwater Pools', place:'Atlanta, GA',
+        dates:'May — Aug 2022',
+        groups:[
+          { title:'Operations', points:[
+            {t:'Ran all operational aspects of an assigned pool — cleaning, maintenance, water testing, chemical levels and logbooks — with zero incidents across 250+ hours.'},
+            {t:'Identified and resolved operational problems independently, including correcting chlorine imbalances with the pool manager.'}
+          ]}
+        ],
+        tech:[{n:'Operations'},{n:'Team Lead'}],
+        noteText:'' }
+    ];
+
+    const jobs = raw.map((j) => ({
+      ...j,
+      open: open === j.id,
+      caret: open === j.id ? '−' : '+',
+      caretColor: open === j.id ? '#B3A369' : '#5C5C64',
+      border: open === j.id ? '#33312A' : '#232326',
+      toggle: () => this.setState({ open: this.state.open === j.id ? null : j.id })
+    }));
+
+    return { jobs };
+  }
+}
+</script>
+</body>
+</html>

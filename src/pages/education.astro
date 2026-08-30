@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/* Scaffold stub — built out in a later session. See PLAN.md §6. */
+---
+
+<BaseLayout title="Education" description="BS Computer Science at Georgia Tech — Info/Internetwork-Intelligence concentration, Fintech minor.">
+  <section class="stub">
+    <p class="eyebrow">Education</p>
+    <h1>Education</h1>
+    <p>This page is scaffolded. Content lands in a later session.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .stub {
+    max-width: var(--container-shell);
+    margin: 0 auto;
+    padding: 88px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .stub h1 {
+    font-weight: 800;
+    font-size: clamp(40px, 6vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .stub p:not(.eyebrow) {
+    margin: 0;
+    color: var(--prose);
+  }
+
+  @media (max-width: 860px) {
+    .stub { padding: 56px 24px 32px; }
+  }
+</style>

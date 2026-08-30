@@ -1,0 +1,495 @@
+[
+  {
+    "id": "python",
+    "label": "Python",
+    "group": "Languages",
+    "order": 0,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "java",
+    "label": "Java",
+    "group": "Languages",
+    "order": 1,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "c",
+    "label": "C",
+    "group": "Languages",
+    "order": 2,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "typescript",
+    "label": "TypeScript",
+    "group": "Languages",
+    "order": 3,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "javascript",
+    "label": "JavaScript",
+    "group": "Languages",
+    "order": 4,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "matlab",
+    "label": "MATLAB",
+    "group": "Languages",
+    "order": 5,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "pine-script",
+    "label": "Pine Script",
+    "group": "Languages",
+    "order": 6,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "html",
+    "label": "HTML",
+    "group": "Languages",
+    "order": 7,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "css",
+    "label": "CSS",
+    "group": "Languages",
+    "order": 8,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "latex",
+    "label": "LaTeX",
+    "group": "Languages",
+    "order": 9,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "assembly",
+    "label": "Assembly",
+    "group": "Languages",
+    "order": 10,
+    "note": "x86 · LC-3",
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "sql",
+    "label": "SQL",
+    "group": "Languages",
+    "order": 11,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "pytorch",
+    "label": "PyTorch",
+    "group": "ML & Data",
+    "order": 12,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "numpy",
+    "label": "NumPy",
+    "group": "ML & Data",
+    "order": 13,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "scipy",
+    "label": "SciPy",
+    "group": "ML & Data",
+    "order": 14,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "matplotlib",
+    "label": "Matplotlib",
+    "group": "ML & Data",
+    "order": 15,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "pandas",
+    "label": "pandas",
+    "group": "ML & Data",
+    "order": 16,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "faiss",
+    "label": "FAISS",
+    "group": "ML & Data",
+    "order": 17,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "sentence-transformers",
+    "label": "sentence-transformers",
+    "group": "ML & Data",
+    "order": 18,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "gemini-api",
+    "label": "Gemini API",
+    "group": "ML & Data",
+    "order": 19,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "google-colab",
+    "label": "Google Colab",
+    "group": "ML & Data",
+    "order": 20,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "jupyter",
+    "label": "Jupyter",
+    "group": "ML & Data",
+    "order": 21,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "react",
+    "label": "React",
+    "group": "Web",
+    "order": 22,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "astro",
+    "label": "Astro",
+    "group": "Web",
+    "order": 23,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "django",
+    "label": "Django",
+    "group": "Web",
+    "order": 24,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "flask",
+    "label": "Flask",
+    "group": "Web",
+    "order": 25,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "tailwind-css",
+    "label": "Tailwind CSS",
+    "group": "Web",
+    "order": 26,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "chart-js",
+    "label": "Chart.js",
+    "group": "Web",
+    "order": 27,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "streamlit",
+    "label": "Streamlit",
+    "group": "Web",
+    "order": 28,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "node-js",
+    "label": "Node.js",
+    "group": "Web",
+    "order": 29,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "aws",
+    "label": "AWS",
+    "group": "Cloud & Infrastructure",
+    "order": 30,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "ecs-fargate",
+    "label": "ECS Fargate",
+    "group": "Cloud & Infrastructure",
+    "order": 31,
+    "note": "AWS",
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "eks",
+    "label": "EKS",
+    "group": "Cloud & Infrastructure",
+    "order": 32,
+    "note": "AWS",
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "terraform",
+    "label": "Terraform",
+    "group": "Cloud & Infrastructure",
+    "order": 33,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "docker",
+    "label": "Docker",
+    "group": "Cloud & Infrastructure",
+    "order": 34,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "vercel",
+    "label": "Vercel",
+    "group": "Cloud & Infrastructure",
+    "order": 35,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "supabase",
+    "label": "Supabase",
+    "group": "Cloud & Infrastructure",
+    "order": 36,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "postgresql",
+    "label": "PostgreSQL",
+    "group": "Cloud & Infrastructure",
+    "order": 37,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "sqlite",
+    "label": "SQLite",
+    "group": "Cloud & Infrastructure",
+    "order": 38,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "pythonanywhere",
+    "label": "PythonAnywhere",
+    "group": "Cloud & Infrastructure",
+    "order": 39,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "git",
+    "label": "Git",
+    "group": "Tools & Observability",
+    "order": 40,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "github",
+    "label": "GitHub",
+    "group": "Tools & Observability",
+    "order": 41,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "datadog",
+    "label": "Datadog",
+    "group": "Tools & Observability",
+    "order": 42,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "observe",
+    "label": "Observe",
+    "group": "Tools & Observability",
+    "order": 43,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "junit",
+    "label": "JUnit",
+    "group": "Tools & Observability",
+    "order": 44,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "google-or-tools",
+    "label": "Google OR-Tools",
+    "group": "Tools & Observability",
+    "order": 45,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "dialogflow-cx",
+    "label": "Dialogflow CX",
+    "group": "Tools & Observability",
+    "order": 46,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "finnhub-api",
+    "label": "Finnhub API",
+    "group": "Tools & Observability",
+    "order": 47,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  },
+  {
+    "id": "yfinance",
+    "label": "YFinance",
+    "group": "Tools & Observability",
+    "order": 48,
+    "usedIn": {
+      "jobs": [],
+      "projects": []
+    }
+  }
+]
