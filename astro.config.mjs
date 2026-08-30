@@ -7,7 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://ryanthw.github.io',
-  trailingSlash: 'ignore',
+  // GitHub Pages serves directory routes at `/stack/` and 301s `/stack`.
+  // Matching that here keeps dev identical to prod and saves a redirect hop.
+  trailingSlash: 'always',
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],

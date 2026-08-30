@@ -3,18 +3,20 @@ import ThemeToggle from './ThemeToggle.astro';
 
 const links = [
   { label: 'Home', href: '/' },
-  { label: 'Stack', href: '/stack' },
-  { label: 'Experience', href: '/experience' },
-  { label: 'Education', href: '/education' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'Connect', href: '/connect' },
+  { label: 'Stack', href: '/stack/' },
+  { label: 'Experience', href: '/experience/' },
+  { label: 'Education', href: '/education/' },
+  { label: 'Projects', href: '/projects/' },
+  { label: 'Connect', href: '/connect/' },
 ];
 
 /** Trailing slashes are normalised so `/stack` and `/stack/` both match. */
 const path = '/' + (Astro.url.pathname.replace(/^\/|\/$/g, '') || '');
 
-const isActive = (href: string) =>
-  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+const isActive = (href: string) => {
+  const target = '/' + href.replace(/^\/|\/$/g, '');
+  return href === '/' ? path === '/' : path === target || path.startsWith(target + '/');
+};
 ---
 
 <header class="nav">
