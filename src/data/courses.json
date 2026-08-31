@@ -1,1 +1,234 @@
-[]
+[
+  {
+    "id": "cs-1331",
+    "code": "CS 1331",
+    "title": "Object-Oriented Programming",
+    "term": "Fall 2024",
+    "termOrder": 1,
+    "grade": "A"
+  },
+  {
+    "id": "math-1554",
+    "code": "MATH 1554",
+    "title": "Linear Algebra",
+    "term": "Fall 2024",
+    "termOrder": 1,
+    "grade": "A"
+  },
+  {
+    "id": "engl-1102",
+    "code": "ENGL 1102",
+    "title": "English Composition II",
+    "term": "Fall 2024",
+    "termOrder": 1,
+    "grade": "A"
+  },
+  {
+    "id": "apph-1040",
+    "code": "APPH 1040",
+    "title": "Foundations of Health",
+    "term": "Fall 2024",
+    "termOrder": 1,
+    "grade": "A"
+  },
+  {
+    "id": "cs-1100",
+    "code": "CS 1100",
+    "title": "Freshman Leap Seminar",
+    "term": "Fall 2024",
+    "termOrder": 1,
+    "grade": "S"
+  },
+  {
+    "id": "cs-1332",
+    "code": "CS 1332",
+    "title": "Data Structures & Algorithms",
+    "term": "Spring 2025",
+    "termOrder": 2,
+    "grade": "A",
+    "highlight": true
+  },
+  {
+    "id": "cs-2050",
+    "code": "CS 2050",
+    "title": "Discrete Mathematics",
+    "term": "Spring 2025",
+    "termOrder": 2,
+    "grade": "A"
+  },
+  {
+    "id": "cs-2340",
+    "code": "CS 2340",
+    "title": "Objects & Design",
+    "term": "Spring 2025",
+    "termOrder": 2,
+    "grade": "A"
+  },
+  {
+    "id": "phil-3109",
+    "code": "PHIL 3109",
+    "title": "Engineering Ethics",
+    "term": "Spring 2025",
+    "termOrder": 2,
+    "grade": "A"
+  },
+  {
+    "id": "psyc-1101",
+    "code": "PSYC 1101",
+    "title": "General Psychology",
+    "term": "Spring 2025",
+    "termOrder": 2,
+    "grade": "A"
+  },
+  {
+    "id": "cs-3600",
+    "code": "CS 3600",
+    "title": "Introduction to Artificial Intelligence",
+    "term": "Summer 2025",
+    "termOrder": 3,
+    "grade": "A",
+    "highlight": true,
+    "campus": "GT Lorraine, Metz"
+  },
+  {
+    "id": "math-2552",
+    "code": "MATH 2552",
+    "title": "Differential Equations",
+    "term": "Summer 2025",
+    "termOrder": 3,
+    "grade": "A",
+    "campus": "GT Lorraine, Metz"
+  },
+  {
+    "id": "lmc-3258",
+    "code": "LMC 3258",
+    "title": "Documentary Film",
+    "term": "Summer 2025",
+    "termOrder": 3,
+    "grade": "A",
+    "campus": "GT Lorraine, Metz"
+  },
+  {
+    "id": "cs-2110",
+    "code": "CS 2110",
+    "title": "Computer Organization & Programming",
+    "term": "Fall 2025",
+    "termOrder": 4,
+    "grade": "A",
+    "highlight": true
+  },
+  {
+    "id": "cs-3510",
+    "code": "CS 3510",
+    "title": "Design & Analysis of Algorithms",
+    "term": "Fall 2025",
+    "termOrder": 4,
+    "grade": "A",
+    "highlight": true
+  },
+  {
+    "id": "math-2550",
+    "code": "MATH 2550",
+    "title": "Multivariable Calculus",
+    "term": "Fall 2025",
+    "termOrder": 4,
+    "grade": "A"
+  },
+  {
+    "id": "eas-2600",
+    "code": "EAS 2600",
+    "title": "Earth Processes",
+    "term": "Fall 2025",
+    "termOrder": 4,
+    "grade": "A"
+  },
+  {
+    "id": "cs-2200",
+    "code": "CS 2200",
+    "title": "Systems and Networks",
+    "term": "Spring 2026",
+    "termOrder": 5,
+    "grade": "A",
+    "highlight": true
+  },
+  {
+    "id": "cs-3630",
+    "code": "CS 3630",
+    "title": "Perception & Robotics",
+    "term": "Spring 2026",
+    "termOrder": 5,
+    "grade": "A",
+    "highlight": true
+  },
+  {
+    "id": "cs-3001",
+    "code": "CS 3001",
+    "title": "Computing & Society",
+    "term": "Spring 2026",
+    "termOrder": 5,
+    "grade": "A"
+  },
+  {
+    "id": "isye-3770",
+    "code": "ISYE 3770",
+    "title": "Statistics & Applications",
+    "term": "Spring 2026",
+    "termOrder": 5,
+    "grade": "A"
+  },
+  {
+    "id": "eas-1600",
+    "code": "EAS 1600",
+    "title": "Environmental Science",
+    "term": "Spring 2026",
+    "termOrder": 5,
+    "grade": "A"
+  },
+  {
+    "id": "cs-4641",
+    "code": "CS 4641",
+    "title": "Machine Learning",
+    "term": "Fall 2026",
+    "termOrder": 6,
+    "grade": "—",
+    "inProgress": true,
+    "highlight": true
+  },
+  {
+    "id": "cx-3803",
+    "code": "CX 3803",
+    "title": "Capstone Project",
+    "term": "Fall 2026",
+    "termOrder": 6,
+    "grade": "—",
+    "inProgress": true,
+    "highlight": true
+  },
+  {
+    "id": "cs-3251",
+    "code": "CS 3251",
+    "title": "Computer Networking I",
+    "term": "Fall 2026",
+    "termOrder": 6,
+    "grade": "—",
+    "inProgress": true
+  },
+  {
+    "id": "cs-3803",
+    "code": "CS 3803",
+    "title": "Technical Communications",
+    "term": "Fall 2026",
+    "termOrder": 6,
+    "grade": "—",
+    "inProgress": true
+  },
+  {
+    "id": "math-3012",
+    "code": "MATH 3012",
+    "title": "Applied Combinatorics",
+    "term": "Fall 2026",
+    "termOrder": 6,
+    "grade": "—",
+    "inProgress": true
+  }
+]

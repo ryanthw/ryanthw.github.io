@@ -21,12 +21,13 @@ Astro + Tailwind CSS, statically built and deployed to GitHub Pages by
 
 ```
 design/            Approved artboards (.dc.html) + the icon generator they came from
-public/            Static assets served as-is
+public/            Static assets served as-is (favicon, résumé PDF)
 scripts/
   build-icons.mjs   Simple Icons + Devicon -> src/data/icons.json, src/data/skills.json
   check-contrast.mjs Contrast audit over the shipped tokens
 src/
-  components/      Nav, Footer, ThemeToggle, TechIcon
+  assets/          Images Astro optimises at build time (headshot)
+  components/      Nav, Footer, ThemeToggle, TechIcon, PageHeader
   content/         jobs/ and projects/ markdown entries
   data/            icons.json (generated), skills.json, courses.json
   layouts/         BaseLayout — head, fonts, theme, motion

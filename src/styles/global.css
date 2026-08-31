@@ -126,6 +126,19 @@
     color: var(--muted);
   }
 
+  /* Page gutter. Nav and Footer keep their own scoped containers — this one
+     is for page content, so a change here never moves the shell. */
+  .wrap {
+    width: 100%;
+    max-width: var(--container-shell);
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  @media (max-width: 860px) {
+    .wrap { padding: 0 24px; }
+  }
+
   /* Tabular mono, for any figure that should line up column-wise. */
   .mono {
     font-family: var(--font-mono), ui-monospace, monospace;

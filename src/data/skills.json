@@ -5,7 +5,9 @@
     "group": "Languages",
     "order": 0,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -15,7 +17,9 @@
     "group": "Languages",
     "order": 1,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "sonatype"
+      ],
       "projects": []
     }
   },
@@ -35,7 +39,9 @@
     "group": "Languages",
     "order": 3,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -116,7 +122,9 @@
     "group": "Languages",
     "order": 11,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -226,7 +234,9 @@
     "group": "Web",
     "order": 22,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -286,7 +296,9 @@
     "group": "Web",
     "order": 28,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -306,7 +318,9 @@
     "group": "Cloud & Infrastructure",
     "order": 30,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "sonatype"
+      ],
       "projects": []
     }
   },
@@ -317,7 +331,9 @@
     "order": 31,
     "note": "AWS",
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "sonatype"
+      ],
       "projects": []
     }
   },
@@ -328,7 +344,9 @@
     "order": 32,
     "note": "AWS",
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "sonatype"
+      ],
       "projects": []
     }
   },
@@ -338,7 +356,9 @@
     "group": "Cloud & Infrastructure",
     "order": 33,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "sonatype"
+      ],
       "projects": []
     }
   },
@@ -358,7 +378,9 @@
     "group": "Cloud & Infrastructure",
     "order": 35,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -368,7 +390,9 @@
     "group": "Cloud & Infrastructure",
     "order": 36,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -378,7 +402,9 @@
     "group": "Cloud & Infrastructure",
     "order": 37,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -408,7 +434,9 @@
     "group": "Tools & Observability",
     "order": 40,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -418,7 +446,9 @@
     "group": "Tools & Observability",
     "order": 41,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -428,7 +458,9 @@
     "group": "Tools & Observability",
     "order": 42,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "sonatype"
+      ],
       "projects": []
     }
   },
@@ -438,7 +470,9 @@
     "group": "Tools & Observability",
     "order": 43,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "sonatype"
+      ],
       "projects": []
     }
   },
@@ -478,7 +512,9 @@
     "group": "Tools & Observability",
     "order": 47,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   },
@@ -488,7 +524,9 @@
     "group": "Tools & Observability",
     "order": 48,
     "usedIn": {
-      "jobs": [],
+      "jobs": [
+        "personal-portfolio-management"
+      ],
       "projects": []
     }
   }

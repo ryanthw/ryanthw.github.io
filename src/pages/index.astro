@@ -1,50 +1,137 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TechIcon from '../components/TechIcon.astro';
+import headshot from '../assets/headshot.jpg';
 
-/* Scaffold placeholder. Real home page lands in session 3 — see PLAN.md §6. */
-const proof = ['Astro', 'TypeScript', 'Tailwind CSS', 'GitHub', 'AWS', 'EKS'];
+/*
+ * Featured work — the three cards from the approved Main artboard.
+ *
+ * Held locally on purpose: the projects collection is empty until session 4.
+ * When it lands, replace this array with the `featured: true` entries and link
+ * each card at its detail page. Card two is a role, not a project, and stays
+ * sourced from the jobs collection's Sonatype entry either way.
+ */
+const featured = [
+  {
+    tag: 'Live',
+    title: 'Options Risk Dashboard',
+    blurb:
+      'Ten-module platform tracking concentration, tail risk and Greeks across a live options book.',
+    stack: ['React', 'TypeScript', 'Supabase'],
+  },
+  {
+    tag: 'Summer 2026',
+    title: 'Sonatype — SWE Intern',
+    blurb:
+      'Migrated Lifecycle infrastructure from EKS to ECS Fargate and managed the AWS estate with Terraform.',
+    stack: ['AWS', 'Terraform', 'ECS Fargate'],
+  },
+  {
+    tag: 'PyTorch',
+    title: 'TCN Stock Model',
+    blurb:
+      'Temporal convolutional network forecasting price series, with trained AAPL and TSLA checkpoints.',
+    stack: ['PyTorch', 'NumPy', 'YFinance'],
+  },
+];
+
+const stats = [
+  { value: 'Georgia Tech', label: 'BS Computer Science · 2028' },
+  { value: '4.00', label: 'Cumulative GPA', accent: true },
+  { value: 'Fintech', label: 'Minor · Info/Intelligence' },
+  { value: 'Atlanta', label: 'Georgia, USA' },
+];
 ---
 
 <BaseLayout
   title="Ryan Walker"
   description="Third-year CS at Georgia Tech — cloud infrastructure and tooling at Sonatype, and a production options-risk platform."
 >
-  <section class="hero">
-    <p class="eyebrow" data-animate>
-      <span class="dot"></span>Software Engineer &nbsp;·&nbsp; Atlanta, GA
-    </p>
-    <h1 data-animate>Ryan<br />Walker</h1>
-    <p class="lede" data-animate>
-      Third-year CS at Georgia Tech, drawn to work where I own the whole system —
-      cloud infrastructure and tooling at Sonatype, and a production options-risk
-      platform of my own.
-    </p>
+  <div class="wrap">
+    <section class="hero">
+      <div class="intro">
+        <p class="eyebrow lead" data-animate>
+          <span class="dot"></span>Software Engineer &nbsp;·&nbsp; Atlanta, GA
+        </p>
+        <h1 data-animate>Ryan<br />Walker</h1>
+        <p class="lede" data-animate>
+          Third-year CS at Georgia Tech, drawn to work where I own the whole system —
+          cloud infrastructure and tooling at Sonatype, and a production options-risk
+          platform of my own.
+        </p>
+        <div class="cta" data-animate>
+          <a class="btn btn--solid" href="/projects/">View Projects</a>
+          <a class="btn" href="/Ryan_Walker_Resume.pdf" download>Résumé ↓</a>
+        </div>
+      </div>
 
-    <div class="scaffold" data-animate>
-      <p class="eyebrow">Scaffold · session 2</p>
-      <p>
-        Shell, tokens, fonts, content schemas and the deploy pipeline are in place.
-        Page content lands in sessions 3 and 4.
-      </p>
-      <ul class="marks">
-        {proof.map((label) => <li><TechIcon label={label} /></li>)}
+      <div class="portrait" data-animate>
+        <Image
+          src={headshot}
+          alt="Ryan Walker"
+          widths={[260, 520]}
+          sizes="(max-width: 860px) 200px, 260px"
+          loading="eager"
+        />
+      </div>
+    </section>
+
+    <section class="stats" aria-label="At a glance">
+      {
+        stats.map((s) => (
+          <div class="stat" data-animate>
+            <span class:list={['stat-value', s.accent && 'stat-value--accent']}>{s.value}</span>
+            <span class="stat-label">{s.label}</span>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="work">
+      <div class="work-head" data-animate>
+        <h2 class="eyebrow">Selected Work</h2>
+        <a class="all" href="/projects/">All projects →</a>
+      </div>
+
+      <ul class="cards">
+        {
+          featured.map((f, i) => (
+            <li class="card" data-animate>
+              <div class="card-top">
+                <span class="index">_{String(i + 1).padStart(2, '0')}</span>
+                <span class="tag">{f.tag}</span>
+              </div>
+              <h3>{f.title}</h3>
+              <p>{f.blurb}</p>
+              <div class="chips">
+                {f.stack.map((t) => (
+                  <span class="chip">{t}</span>
+                ))}
+              </div>
+            </li>
+          ))
+        }
       </ul>
-    </div>
-  </section>
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
   .hero {
-    max-width: var(--container-shell);
-    margin: 0 auto;
-    padding: 88px 40px 40px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 56px;
+    align-items: end;
+    padding: 88px 0 44px;
+  }
+
+  .intro {
     display: flex;
     flex-direction: column;
     gap: 26px;
   }
 
-  .eyebrow {
+  .lead {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -56,6 +143,7 @@ const proof = ['Astro', 'TypeScript', 'Tailwind CSS', 'GitHub', 'AWS', 'EKS'];
     height: 5px;
     border-radius: 50%;
     background: var(--accent);
+    flex: none;
   }
 
   h1 {
@@ -74,31 +162,220 @@ const proof = ['Astro', 'TypeScript', 'Tailwind CSS', 'GitHub', 'AWS', 'EKS'];
     color: var(--prose);
   }
 
-  .scaffold {
-    margin-top: 20px;
-    padding-top: 26px;
+  .cta {
+    display: flex;
+    gap: 12px;
+    padding-top: 6px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--hairline);
+    color: var(--text);
+    padding: 11px 20px;
+    border-radius: 2px;
+    transition:
+      color 120ms var(--ease-out-soft),
+      border-color 120ms var(--ease-out-soft),
+      background-color 120ms var(--ease-out-soft);
+  }
+
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn--solid {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+  }
+
+  .btn--solid:hover {
+    color: var(--on-accent);
+    opacity: 0.88;
+  }
+
+  .portrait {
+    width: 260px;
+    height: 300px;
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .portrait :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 32%;
+    display: block;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .stat {
+    padding: 22px 0 22px 28px;
+    border-left: 1px solid var(--hairline);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 5px;
   }
 
-  .scaffold p:not(.eyebrow) {
-    margin: 0;
-    max-width: 52ch;
-    color: var(--prose);
+  .stat:first-child {
+    padding-left: 0;
+    border-left: 0;
   }
 
-  .marks {
+  .stat-value {
+    font-family: var(--font-display), sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .stat-value--accent { color: var(--accent); }
+
+  .stat-label {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .work {
+    padding-top: 64px;
     display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .work-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
     gap: 16px;
-    align-items: center;
+  }
+
+  .all {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
     list-style: none;
-    margin: 8px 0 0;
+    margin: 0;
     padding: 0;
   }
 
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 250px;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .index {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+
+  .tag {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .card h3 {
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+
+  .card p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.55;
+    flex-grow: 1;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .chip {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+    padding: 3px 8px;
+  }
+
+  @media (max-width: 980px) {
+    .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
   @media (max-width: 860px) {
-    .hero { padding: 56px 24px 32px; }
+    .hero {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      padding: 48px 0 36px;
+      align-items: start;
+    }
+
+    .portrait { width: 200px; height: 232px; }
+
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .stat { padding: 18px 0 18px 20px; }
+
+    .stat:nth-child(3) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .stat:nth-child(n + 3) { border-top: 1px solid var(--hairline); }
+
+    .work { padding-top: 44px; }
+
+    .cards { grid-template-columns: minmax(0, 1fr); }
+
+    .card { min-height: 0; }
   }
 </style>

@@ -1,41 +1,250 @@
 ---
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import TechIcon from '../components/TechIcon.astro';
 
-/* Scaffold stub — built out in a later session. See PLAN.md §6. */
+/** Locked group order from the approved Stack artboard. */
+const GROUPS = [
+  'Languages',
+  'ML & Data',
+  'Web',
+  'Cloud & Infrastructure',
+  'Tools & Observability',
+] as const;
+
+const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
+
+/**
+ * Each chip points at where the technology was actually used.
+ *
+ * Only the jobs side is wired today — the projects collection is empty until
+ * session 4, and a reference to an entry that does not exist logs a content
+ * error on every build. Session 4 fills `usedIn.projects` in skills.json and
+ * this resolver picks them up with no change here beyond the projects branch.
+ *
+ * Anchor contract for session 4: the Experience accordion must give each job
+ * card `id="job-<entry id>"`.
+ */
+const tiles = await Promise.all(
+  skills.map(async (skill) => {
+    const jobs = await Promise.all(skill.data.usedIn.jobs.map((ref) => getEntry(ref)));
+    const found = jobs.filter((j) => j != null);
+
+    const href =
+      found.length === 1
+        ? `/experience/#job-${found[0].id}`
+        : found.length > 1
+          ? '/experience/'
+          : undefined;
+
+    const where = found.map((j) => j.data.company).join(' and ');
+
+    return { skill, href, where };
+  }),
+);
+
+const counts = new Map(GROUPS.map((g) => [g, skills.filter((s) => s.data.group === g).length]));
+const total = skills.length;
+const linked = tiles.filter((t) => t.href).length;
 ---
 
-<BaseLayout title="Stack" description="Languages, ML and data, web, cloud and infrastructure, and tooling Ryan Walker works in.">
-  <section class="stub">
-    <p class="eyebrow">Stack</p>
-    <h1>Stack</h1>
-    <p>This page is scaffolded. Content lands in a later session.</p>
-  </section>
+<BaseLayout
+  title="Stack"
+  description="Languages, ML and data, web, cloud and infrastructure, and tooling Ryan Walker works in."
+>
+  <div class="wrap">
+    <PageHeader
+      eyebrow="Stack"
+      title="Technologies"
+      lede={`${total} technologies I have shipped something with — grouped by what they are for, not by how well I claim to know them.`}
+    >
+      <p class="legend">
+        <span class="dot"></span>{linked} link to where they were used
+      </p>
+    </PageHeader>
+
+    {
+      GROUPS.map((group) => (
+        <section class="group" aria-labelledby={`grp-${group.replace(/\W+/g, '-').toLowerCase()}`}>
+          <div class="group-head">
+            <h2 id={`grp-${group.replace(/\W+/g, '-').toLowerCase()}`}>{group}</h2>
+            <span class="count">
+              {String(counts.get(group)).padStart(2, '0')} technologies
+            </span>
+          </div>
+
+          <ul class="grid">
+            {tiles
+              .filter((t) => t.skill.data.group === group)
+              .map(({ skill, href, where }) => {
+                const Tag = href ? 'a' : 'div';
+                return (
+                  <li data-animate>
+                    <Tag
+                      class:list={['tile', href && 'tile--linked']}
+                      href={href}
+                      aria-label={href ? `${skill.data.label} — used at ${where}` : undefined}
+                    >
+                      <span class="mark">
+                        <TechIcon label={skill.data.label} />
+                      </span>
+                      <span class="name">
+                        <span class="label">{skill.data.label}</span>
+                        {skill.data.note && <span class="note">{skill.data.note}</span>}
+                      </span>
+                    </Tag>
+                  </li>
+                );
+              })}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
 </BaseLayout>
 
 <style>
-  .stub {
-    max-width: var(--container-shell);
-    margin: 0 auto;
-    padding: 88px 40px 40px;
+  .legend {
+    margin: 2px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .legend .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+
+  .group {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 32px;
+    padding: 30px 0;
+    align-items: start;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .group:first-of-type { border-top: 0; }
+
+  .group-head {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 6px;
+    position: sticky;
+    top: 24px;
   }
 
-  .stub h1 {
-    font-weight: 800;
-    font-size: clamp(40px, 6vw, 64px);
-    line-height: 1;
-    letter-spacing: -0.03em;
+  .group-head h2 {
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.014em;
+    line-height: 1.15;
+  }
+
+  .count {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.11em;
     text-transform: uppercase;
+    color: var(--faint);
   }
 
-  .stub p:not(.eyebrow) {
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    list-style: none;
     margin: 0;
-    color: var(--prose);
+    padding: 0;
   }
 
-  @media (max-width: 860px) {
-    .stub { padding: 56px 24px 32px; }
+  .tile {
+    position: relative;
+    height: 100%;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    text-align: center;
+    min-height: 92px;
+    transition: border-color 120ms var(--ease-out-soft);
+  }
+
+  /* A linked tile carries the accent dot the legend explains. */
+  .tile--linked::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .tile--linked:hover { border-color: var(--accent); }
+  .tile--linked:hover .label { color: var(--accent); }
+
+  .mark {
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .name {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .label {
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.25;
+    transition: color 120ms var(--ease-out-soft);
+  }
+
+  .note {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  @media (max-width: 980px) {
+    .group {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .group-head {
+      position: static;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 </style>
