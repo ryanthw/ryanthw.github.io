@@ -48,27 +48,28 @@ const stats = [
   description="Third-year CS at Georgia Tech — cloud infrastructure and tooling at Sonatype, and a production options-risk platform."
 >
   <div class="wrap">
-    {/* No data-animate on the hero: it is above the fold on arrival, so the
-        scroll-in fade only delays the LCP paint behind the observer. Everything
-        below still fades in. */}
+    {/* The hero fades in with everything else — Ryan's call, 2026-08-31. It
+        costs roughly 390ms of LCP render delay because the observer gates the
+        paint; the Lighthouse budget absorbs it. Removing data-animate from
+        these five elements is the revert. */}
     <section class="hero">
       <div class="intro">
-        <p class="eyebrow lead">
+        <p class="eyebrow lead" data-animate>
           <span class="dot"></span>Software Engineer &nbsp;·&nbsp; Atlanta, GA
         </p>
-        <h1>Ryan<br />Walker</h1>
-        <p class="lede">
+        <h1 data-animate>Ryan<br />Walker</h1>
+        <p class="lede" data-animate>
           Third-year CS at Georgia Tech, drawn to work where I own the whole system —
           cloud infrastructure and tooling at Sonatype, and a production options-risk
           platform of my own.
         </p>
-        <div class="cta">
+        <div class="cta" data-animate>
           <a class="btn btn--solid" href="/projects/">View Projects</a>
           <a class="btn" href="/Ryan_Walker_Resume.pdf" download>Résumé ↓</a>
         </div>
       </div>
 
-      <div class="portrait">
+      <div class="portrait" data-animate>
         <Image
           src={headshot}
           alt="Ryan Walker"
