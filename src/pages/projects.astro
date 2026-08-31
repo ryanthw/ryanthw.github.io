@@ -1,41 +1,288 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 
-/* Scaffold stub — built out in a later session. See PLAN.md §6. */
+const projects = (await getCollection('projects'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => a.data.order - b.data.order);
+
+/** Filter chips. `key` is matched against each card's data-categories. */
+const filters = [
+  { key: 'all', label: 'All' },
+  { key: 'quant', label: 'Quant' },
+  { key: 'ml', label: 'ML' },
+  { key: 'web', label: 'Web' },
+] as const;
+
+const LABEL: Record<string, string> = { quant: 'Quant', ml: 'ML', web: 'Web' };
 ---
 
-<BaseLayout title="Projects" description="Selected engineering work — options risk platform, ML models, and web applications.">
-  <section class="stub">
-    <p class="eyebrow">Projects</p>
-    <h1>Projects</h1>
-    <p>This page is scaffolded. Content lands in a later session.</p>
-  </section>
+<BaseLayout
+  title="Projects"
+  description="Selected engineering work — an options risk platform, ML models, quantitative research and web applications."
+>
+  <div class="wrap">
+    <PageHeader eyebrow="Projects" title="Things I've built" />
+
+    <div class="filters" role="group" aria-label="Filter projects by category">
+      {
+        filters.map((f) => (
+          <button
+            type="button"
+            class="chip-filter"
+            data-filter={f.key}
+            aria-pressed={f.key === 'all' ? 'true' : 'false'}
+          >
+            {f.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <p class="count" aria-live="polite" data-count>
+      Showing all {projects.length} projects
+    </p>
+
+    <ul class="grid">
+      {
+        projects.map((p) => (
+          <li class="cell" data-categories={p.data.categories.join(' ')} data-animate>
+            <a class="card" href={`/projects/${p.id}/`}>
+              <div class="card-top">
+                <span class="cat">{p.data.categories.map((c) => LABEL[c]).join(' · ')}</span>
+                <span class="year">{p.data.year}</span>
+              </div>
+
+              <h2>{p.data.title}</h2>
+              <p class="blurb">{p.data.tagline}</p>
+
+              <div class="chips">
+                {p.data.stack.slice(0, 3).map((t) => (
+                  <span class="chip">{t}</span>
+                ))}
+                {p.data.stack.length > 3 && (
+                  <span class="chip chip--more">+{p.data.stack.length - 3}</span>
+                )}
+              </div>
+
+              <span class:list={['go', !p.data.repo && !p.data.live && 'go--quiet']}>
+                {p.data.repo || p.data.live ? 'Case study + repo →' : 'Write-up — no repo'}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="empty" data-empty hidden>No projects in that category.</p>
+  </div>
 </BaseLayout>
 
+<script>
+  /* Category filter. Progressive: with no JS every card stays visible and the
+     chips simply do nothing. */
+  function bindFilters() {
+    const chips = [...document.querySelectorAll<HTMLButtonElement>('.chip-filter')];
+    const cells = [...document.querySelectorAll<HTMLElement>('.cell')];
+    const count = document.querySelector<HTMLElement>('[data-count]');
+    const empty = document.querySelector<HTMLElement>('[data-empty]');
+    if (!chips.length || !cells.length) return;
+
+    const apply = (key: string) => {
+      let shown = 0;
+
+      for (const cell of cells) {
+        const cats = (cell.dataset.categories ?? '').split(' ');
+        const match = key === 'all' || cats.includes(key);
+        cell.hidden = !match;
+        if (match) shown += 1;
+      }
+
+      for (const chip of chips) {
+        chip.setAttribute('aria-pressed', String(chip.dataset.filter === key));
+      }
+
+      const label = chips.find((c) => c.dataset.filter === key)?.textContent?.trim() ?? '';
+      if (count) {
+        count.textContent =
+          key === 'all'
+            ? `Showing all ${shown} projects`
+            : `Showing ${shown} ${label} project${shown === 1 ? '' : 's'}`;
+      }
+      if (empty) empty.hidden = shown > 0;
+    };
+
+    for (const chip of chips) {
+      if (chip.dataset.bound) continue;
+      chip.dataset.bound = 'true';
+      chip.addEventListener('click', () => apply(chip.dataset.filter ?? 'all'));
+    }
+  }
+
+  bindFilters();
+  document.addEventListener('astro:after-swap', bindFilters);
+</script>
+
 <style>
-  .stub {
-    max-width: var(--container-shell);
-    margin: 0 auto;
-    padding: 88px 40px 40px;
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-bottom: 14px;
+  }
+
+  .chip-filter {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid var(--hairline);
+    background: var(--surface);
+    color: var(--muted);
+    transition:
+      color 120ms var(--ease-out-soft),
+      border-color 120ms var(--ease-out-soft),
+      background-color 120ms var(--ease-out-soft);
+  }
+
+  .chip-filter:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .chip-filter[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .count {
+    margin: 0 0 22px;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cell[hidden] { display: none; }
+
+  .card {
+    height: 100%;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 11px;
+    min-height: 240px;
+    transition: border-color 120ms var(--ease-out-soft);
   }
 
-  .stub h1 {
-    font-weight: 800;
-    font-size: clamp(40px, 6vw, 64px);
-    line-height: 1;
-    letter-spacing: -0.03em;
+  .card:hover { border-color: var(--accent); }
+  .card:hover h2 { color: var(--accent); }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .cat {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    color: var(--accent);
   }
 
-  .stub p:not(.eyebrow) {
+  .year {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--faint);
+    white-space: nowrap;
+  }
+
+  .card h2 {
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.012em;
+    line-height: 1.2;
+    transition: color 120ms var(--ease-out-soft);
+  }
+
+  .blurb {
     margin: 0;
-    color: var(--prose);
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.55;
+    flex-grow: 1;
   }
 
-  @media (max-width: 860px) {
-    .stub { padding: 56px 24px 32px; }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .chip {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+    padding: 3px 7px;
+    background: var(--canvas);
+  }
+
+  .chip--more { color: var(--faint); }
+
+  .go {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-top: 1px solid var(--hairline);
+    padding-top: 10px;
+    margin-top: 3px;
+  }
+
+  /* Coursework: a write-up with no repository to link. Says so, quietly. */
+  .go--quiet { color: var(--faint); }
+
+  .empty {
+    margin: 0;
+    padding: 32px 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 980px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
+
+    .card { min-height: 0; }
   }
 </style>

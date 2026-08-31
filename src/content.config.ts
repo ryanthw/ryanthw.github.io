@@ -85,6 +85,14 @@ const projects = defineCollection({
           }),
         )
         .default([]),
+      /**
+       * The "what it measures" grid on the detail page — short label plus one
+       * line. Generic on purpose: the dashboard uses it for portfolio metrics,
+       * but any project with a set of headline facts can.
+       */
+      highlights: z
+        .array(z.object({ label: z.string(), detail: z.string() }))
+        .default([]),
       /** Structured summary shown above the body on the detail page. */
       problem: z.string(),
       approach: z.string(),

@@ -18,29 +18,41 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
 /**
  * Each chip points at where the technology was actually used.
  *
- * Only the jobs side is wired today — the projects collection is empty until
- * session 4, and a reference to an entry that does not exist logs a content
- * error on every build. Session 4 fills `usedIn.projects` in skills.json and
- * this resolver picks them up with no change here beyond the projects branch.
- *
- * Anchor contract for session 4: the Experience accordion must give each job
- * card `id="job-<entry id>"`.
+ * A skill can have several pieces of evidence. The tile links to the strongest
+ * single one — a project detail page ahead of a job, and within projects the
+ * lowest `order`, which is the flagship — and the accessible name says how many
+ * others there are. Anchor contract: the Experience accordion gives each card
+ * `id="job-<entry id>"`.
  */
 const tiles = await Promise.all(
   skills.map(async (skill) => {
-    const jobs = await Promise.all(skill.data.usedIn.jobs.map((ref) => getEntry(ref)));
-    const found = jobs.filter((j) => j != null);
+    const [jobs, projects] = await Promise.all([
+      Promise.all(skill.data.usedIn.jobs.map((ref) => getEntry(ref))),
+      Promise.all(skill.data.usedIn.projects.map((ref) => getEntry(ref))),
+    ]);
 
-    const href =
-      found.length === 1
-        ? `/experience/#job-${found[0].id}`
-        : found.length > 1
-          ? '/experience/'
-          : undefined;
+    const targets = [
+      ...projects
+        .filter((p) => p != null)
+        .sort((a, b) => a.data.order - b.data.order)
+        .map((p) => ({ href: `/projects/${p.id}/`, name: p.data.title })),
+      ...jobs
+        .filter((j) => j != null)
+        .sort((a, b) => b.data.order - a.data.order)
+        .map((j) => ({ href: `/experience/#job-${j.id}`, name: j.data.company })),
+    ];
 
-    const where = found.map((j) => j.data.company).join(' and ');
+    const [primary, ...rest] = targets;
 
-    return { skill, href, where };
+    return {
+      skill,
+      href: primary?.href,
+      label: primary
+        ? `${skill.data.label} — used in ${primary.name}${
+            rest.length ? ` and ${rest.length} other${rest.length === 1 ? '' : 's'}` : ''
+          }`
+        : undefined,
+    };
   }),
 );
 
@@ -77,14 +89,14 @@ const linked = tiles.filter((t) => t.href).length;
           <ul class="grid">
             {tiles
               .filter((t) => t.skill.data.group === group)
-              .map(({ skill, href, where }) => {
+              .map(({ skill, href, label }) => {
                 const Tag = href ? 'a' : 'div';
                 return (
                   <li data-animate>
                     <Tag
                       class:list={['tile', href && 'tile--linked']}
                       href={href}
-                      aria-label={href ? `${skill.data.label} — used at ${where}` : undefined}
+                      aria-label={label}
                     >
                       <span class="mark">
                         <TechIcon label={skill.data.label} />

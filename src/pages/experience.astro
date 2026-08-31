@@ -1,41 +1,385 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 
-/* Scaffold stub — built out in a later session. See PLAN.md §6. */
+const all = (await getCollection('jobs')).sort((a, b) => b.data.order - a.data.order);
+const roles = all.filter((j) => !j.data.leadership);
+const leadership = all.filter((j) => j.data.leadership);
+
+/** "May 2026" + "Aug 2026" -> "May — Aug 2026". No end date reads as Present. */
+const dates = (start: string, end?: string) => {
+  if (!end) return `${start} — Present`;
+  const [sm, sy] = start.split(' ');
+  const [em, ey] = end.split(' ');
+  return sy && sy === ey ? `${sm} — ${em} ${ey}` : `${start} — ${end}`;
+};
 ---
 
-<BaseLayout title="Experience" description="Software engineering at Sonatype, personal portfolio management, and Georgia Tech leadership.">
-  <section class="stub">
-    <p class="eyebrow">Experience</p>
-    <h1>Experience</h1>
-    <p>This page is scaffolded. Content lands in a later session.</p>
-  </section>
+<BaseLayout
+  title="Experience"
+  description="Software engineering at Sonatype, a self-built options-risk platform, and Georgia Tech leadership."
+>
+  <div class="wrap">
+    <PageHeader
+      eyebrow="Experience"
+      title="Where I've worked"
+      lede={`${roles.length} roles, expanded for detail. Each carries what I actually built and the tools I built it with.`}
+    />
+
+    <div class="stack">
+      {
+        roles.map((job) => (
+          <details id={`job-${job.id}`} class="card" open={job.data.defaultOpen} data-animate>
+            <summary>
+              <span class="who">
+                <span class="role">{job.data.role}</span>
+                <span class="org">
+                  {job.data.company} &nbsp;·&nbsp; {job.data.location}
+                </span>
+              </span>
+              <span class="when">{dates(job.data.start, job.data.end)}</span>
+              <span class="caret" aria-hidden="true" />
+            </summary>
+
+            <div class="body">
+              <div class="rule" />
+
+              {job.data.groups.map((group) => (
+                <div class="group">
+                  <h3>{group.heading}</h3>
+                  <ul>
+                    {group.bullets.map((b) => (
+                      <li>{b}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+
+              {job.data.stack.length > 0 && (
+                <div class="group">
+                  <h3 class="h3--quiet">Stack</h3>
+                  <div class="chips">
+                    {job.data.stack.map((t) => (
+                      <span class="chip">{t}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {job.data.evidence.length > 0 && (
+                <div class="group">
+                  <h3 class="h3--quiet">Evidence</h3>
+                  <div class="links">
+                    {job.data.evidence.map((e) => (
+                      <a href={e.href} target="_blank" rel="noopener noreferrer">
+                        {e.label} ↗
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {job.data.note && <p class="note">{job.data.note}</p>}
+            </div>
+          </details>
+        ))
+      }
+    </div>
+
+    <section class="band">
+      <h2 class="eyebrow" data-animate>Leadership</h2>
+      <div class="band-grid">
+        {
+          leadership.map((job) => (
+            <article class="lead-card" data-animate>
+              <h3>
+                {job.data.role} — {job.data.company}
+              </h3>
+              <p class="lead-dates">{dates(job.data.start, job.data.end)}</p>
+              <p class="lead-body">{job.data.summary}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
 </BaseLayout>
 
+<script>
+  /* One card open at a time, plus deep-link support for the Stack page's
+     /experience/#job-<id> links. Without this the native accordion still
+     works — every card just opens independently. */
+  function bindAccordion() {
+    const cards = [...document.querySelectorAll<HTMLDetailsElement>('details.card')];
+    if (!cards.length) return;
+
+    for (const card of cards) {
+      if (card.dataset.bound) continue;
+      card.dataset.bound = 'true';
+
+      card.addEventListener('toggle', () => {
+        if (!card.open) return;
+        for (const other of cards) if (other !== card) other.open = false;
+      });
+    }
+
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    const target = cards.find((c) => c.id === id);
+    if (!target) return;
+
+    for (const card of cards) card.open = card === target;
+    target.scrollIntoView({
+      block: 'start',
+      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    });
+  }
+
+  bindAccordion();
+  document.addEventListener('astro:after-swap', bindAccordion);
+  window.addEventListener('hashchange', bindAccordion);
+</script>
+
 <style>
-  .stub {
-    max-width: var(--container-shell);
-    margin: 0 auto;
-    padding: 88px 40px 40px;
+  .stack {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 10px;
+    padding-bottom: 56px;
   }
 
-  .stub h1 {
-    font-weight: 800;
-    font-size: clamp(40px, 6vw, 64px);
-    line-height: 1;
-    letter-spacing: -0.03em;
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    transition: border-color 120ms var(--ease-out-soft);
+  }
+
+  .card[open] { border-color: var(--monogram-border); }
+
+  summary {
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 20px;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  .who {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .role {
+    font-family: var(--font-display), sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.012em;
+  }
+
+  .org,
+  .when {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .when { white-space: nowrap; }
+
+  /* A drawn caret rather than a glyph, so it can rotate on open. */
+  .caret {
+    width: 9px;
+    height: 9px;
+    border-right: 1.5px solid var(--faint);
+    border-bottom: 1.5px solid var(--faint);
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition:
+      transform 180ms var(--ease-out-soft),
+      border-color 120ms var(--ease-out-soft);
+  }
+
+  .card[open] .caret {
+    transform: rotate(225deg) translate(-2px, -2px);
+    border-color: var(--accent);
+  }
+
+  summary:hover .role { color: var(--accent); }
+
+  .body {
+    padding: 0 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .rule {
+    height: 1px;
+    background: var(--hairline);
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .group h3 {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
+    color: var(--accent);
   }
 
-  .stub p:not(.eyebrow) {
+  .h3--quiet { color: var(--muted); }
+
+  .group ul {
+    list-style: none;
     margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .group li {
+    display: grid;
+    grid-template-columns: 14px minmax(0, 1fr);
+    gap: 8px;
+    font-size: 14.5px;
     color: var(--prose);
+    line-height: 1.6;
+  }
+
+  .group li::before {
+    content: '—';
+    color: var(--faint);
+    font-size: 14px;
+  }
+
+  .chips,
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .links { gap: 16px; }
+
+  .chip {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+    padding: 4px 9px;
+    background: var(--canvas);
+  }
+
+  .links a {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+
+  /* The Sonatype caveat strip — accent rule, no fill beyond a token tint. */
+  .note {
+    margin: 0;
+    border-left: 2px solid var(--accent);
+    padding: 8px 14px;
+    background: var(--canvas);
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+
+  .band {
+    border-top: 1px solid var(--hairline);
+    padding-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .band-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .lead-card {
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    background: var(--surface);
+  }
+
+  .lead-card h3 {
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  .lead-dates {
+    margin: 0;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  .lead-body {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* Opening reveal only — 180ms, inside the locked motion budget. Closing is
+     instant, which keeps this to CSS instead of a height-animation harness. */
+  @media (prefers-reduced-motion: no-preference) {
+    .card[open] .body {
+      animation: reveal 180ms var(--ease-out-soft);
+    }
+  }
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   @media (max-width: 860px) {
-    .stub { padding: 56px 24px 32px; }
+    summary {
+      grid-template-columns: minmax(0, 1fr) auto;
+      row-gap: 8px;
+      padding: 18px;
+    }
+
+    .when { grid-column: 1; }
+
+    .caret {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .body { padding: 0 18px 18px; }
+
+    .band-grid { grid-template-columns: minmax(0, 1fr); }
   }
 </style>

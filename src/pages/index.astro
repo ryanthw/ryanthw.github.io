@@ -2,38 +2,38 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import headshot from '../assets/headshot.jpg';
+import { getCollection, getEntry } from 'astro:content';
 
 /*
- * Featured work — the three cards from the approved Main artboard.
- *
- * Held locally on purpose: the projects collection is empty until session 4.
- * When it lands, replace this array with the `featured: true` entries and link
- * each card at its detail page. Card two is a role, not a project, and stays
- * sourced from the jobs collection's Sonatype entry either way.
+ * Selected work — the three cards from the approved Main artboard: the two
+ * featured projects either side of the Sonatype role. Cards one and three come
+ * from the projects collection, so editing a project entry updates the home
+ * page too.
  */
+const featuredProjects = (await getCollection('projects'))
+  .filter((p) => p.data.featured && !p.data.draft)
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((p) => ({
+    tag: p.data.live || p.data.repo ? 'Live' : p.data.year,
+    title: p.data.title,
+    blurb: p.data.tagline,
+    stack: p.data.stack.slice(0, 3),
+    href: `/projects/${p.id}/`,
+  }));
+
+const sonatype = await getEntry('jobs', 'sonatype');
+
 const featured = [
-  {
-    tag: 'Live',
-    title: 'Options Risk Dashboard',
-    blurb:
-      'Ten-module platform tracking concentration, tail risk and Greeks across a live options book.',
-    stack: ['React', 'TypeScript', 'Supabase'],
-  },
-  {
+  featuredProjects[0],
+  sonatype && {
     tag: 'Summer 2026',
-    title: 'Sonatype — SWE Intern',
-    blurb:
-      'Migrated Lifecycle infrastructure from EKS to ECS Fargate and managed the AWS estate with Terraform.',
-    stack: ['AWS', 'Terraform', 'ECS Fargate'],
+    title: `${sonatype.data.company} — SWE Intern`,
+    blurb: sonatype.data.summary,
+    stack: sonatype.data.stack.slice(0, 3),
+    href: `/experience/#job-${sonatype.id}`,
   },
-  {
-    tag: 'PyTorch',
-    title: 'TCN Stock Model',
-    blurb:
-      'Temporal convolutional network forecasting price series, with trained AAPL and TSLA checkpoints.',
-    stack: ['PyTorch', 'NumPy', 'YFinance'],
-  },
-];
+  featuredProjects[1],
+].filter((c) => c != null);
 
 const stats = [
   { value: 'Georgia Tech', label: 'BS Computer Science · 2028' },
@@ -96,18 +96,20 @@ const stats = [
       <ul class="cards">
         {
           featured.map((f, i) => (
-            <li class="card" data-animate>
-              <div class="card-top">
-                <span class="index">_{String(i + 1).padStart(2, '0')}</span>
-                <span class="tag">{f.tag}</span>
-              </div>
-              <h3>{f.title}</h3>
-              <p>{f.blurb}</p>
-              <div class="chips">
-                {f.stack.map((t) => (
-                  <span class="chip">{t}</span>
-                ))}
-              </div>
+            <li data-animate>
+              <a class="card" href={f.href}>
+                <div class="card-top">
+                  <span class="index">_{String(i + 1).padStart(2, '0')}</span>
+                  <span class="tag">{f.tag}</span>
+                </div>
+                <h3>{f.title}</h3>
+                <p>{f.blurb}</p>
+                <div class="chips">
+                  {f.stack.map((t) => (
+                    <span class="chip">{t}</span>
+                  ))}
+                </div>
+              </a>
             </li>
           ))
         }
@@ -285,6 +287,8 @@ const stats = [
   }
 
   .card {
+    height: 100%;
+    transition: border-color 120ms var(--ease-out-soft);
     background: var(--surface);
     border: 1px solid var(--hairline);
     border-radius: 3px;
@@ -294,6 +298,9 @@ const stats = [
     gap: 14px;
     min-height: 250px;
   }
+
+  .card:hover { border-color: var(--accent); }
+  .card:hover h3 { color: var(--accent); }
 
   .card-top {
     display: flex;
@@ -317,6 +324,7 @@ const stats = [
   }
 
   .card h3 {
+    transition: color 120ms var(--ease-out-soft);
     font-weight: 700;
     font-size: 22px;
     letter-spacing: -0.015em;

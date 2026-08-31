@@ -31,7 +31,7 @@ src/
   content/         jobs/ and projects/ markdown entries
   data/            icons.json (generated), skills.json, courses.json
   layouts/         BaseLayout — head, fonts, theme, motion
-  pages/           One file per route
+  pages/           One file per route; projects/[...slug] renders detail pages
   styles/          global.css — the design token layer
   content.config.ts  Collection schemas for jobs, projects, courses, skills
 ```
