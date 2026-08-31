@@ -16,7 +16,16 @@
  */
 import groups from '../data/icons.json';
 
-type SimpleIcon = { label: string; src: 'si'; path: string; dark: string; light: string; raw: string };
+type SimpleIcon = {
+  label: string;
+  src: 'si';
+  path: string;
+  dark: string;
+  light: string;
+  raw: string;
+  /** Custom marks may sit on a different grid — see CUSTOM in build-icons.mjs. */
+  viewBox?: string;
+};
 type DevIcon =
   | { label: string; src: 'dv'; plate: false; svgDark: string; svgLight: string }
   /** Polychrome mark: real colours on a neutral plate, one variant for both themes. */
@@ -92,7 +101,7 @@ const lightSvg = icon.src === 'dv' && !icon.plate ? namespaceIds(icon.svgLight, 
     <svg
       class:list={['tech-icon', monochrome && 'tech-icon--mono-fill', className]}
       style={monochrome ? undefined : `--fill-dark:${icon.dark};--fill-light:${icon.light}`}
-      viewBox="0 0 24 24"
+      viewBox={icon.viewBox ?? '0 0 24 24'}
       width={size}
       height={size}
       role="img"

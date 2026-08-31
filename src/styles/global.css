@@ -160,18 +160,41 @@
   }
 }
 
-/* Motion budget: 8px fade-up on scroll-in, 150ms. Applied by ../scripts
-   observer; the class is inert until `data-inview` lands. */
+/*
+  Motion budget: 8px fade-up on scroll-in, 150ms.
+
+  This was a JS IntersectionObserver that set [data-inview]. That shipped a real
+  bug: the hidden state applied at first paint, but the observer lived in a
+  deferred module, so every animated element stayed invisible until the whole
+  document had parsed and the module had run. On Stack (144 KB of inline SVG)
+  and Projects that is long enough to read as a broken page.
+
+  A view() timeline fixes it by construction. The animation's progress is a
+  function of scroll position, resolved by the compositor at first paint — an
+  element already on screen is past the end of its range, so it renders at its
+  final state immediately. Nothing is ever hidden waiting for script.
+
+  No @supports guard, deliberately. A browser that does not know
+  `animation-timeline` drops that one declaration and runs `rise` on the default
+  document timeline instead — so the page fades up once on load rather than per
+  element on scroll. Both outcomes are fine; neither can leave content hidden.
+  (Lightning CSS strips a redundant @supports here anyway, so writing one would
+  only have misled the next reader.)
+*/
 @media (prefers-reduced-motion: no-preference) {
   [data-animate] {
+    animation: rise 150ms var(--ease-out-soft) both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 25%;
+  }
+}
+
+@keyframes rise {
+  from {
     opacity: 0;
     transform: translateY(8px);
-    transition:
-      opacity 150ms var(--ease-out-soft),
-      transform 150ms var(--ease-out-soft);
   }
-
-  [data-animate][data-inview] {
+  to {
     opacity: 1;
     transform: none;
   }

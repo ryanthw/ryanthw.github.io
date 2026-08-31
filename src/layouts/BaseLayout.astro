@@ -104,20 +104,6 @@ const og = new URL(ogImage ?? '/og.png', Astro.site).href;
       })();
     </script>
 
-    <!--
-      [data-animate] starts at opacity 0 and is revealed by the observer below.
-      With scripting off nothing would ever reveal it, so the page would render
-      blank. This is the belt for that brace.
-    -->
-    <noscript>
-      <style>
-        [data-animate] {
-          opacity: 1 !important;
-          transform: none !important;
-        }
-      </style>
-    </noscript>
-
     <Font cssVariable="--font-display" preload />
     <Font cssVariable="--font-body" preload />
     <Font cssVariable="--font-mono" />
@@ -132,38 +118,6 @@ const og = new URL(ogImage ?? '/og.png', Astro.site).href;
       <slot />
     </main>
     <Footer />
-
-    <script>
-      /* Motion budget: 8px fade-up on scroll-in, 150ms, once. */
-      function observe() {
-        const targets = document.querySelectorAll('[data-animate]:not([data-inview])');
-        if (!targets.length) return;
-
-        if (
-          !('IntersectionObserver' in window) ||
-          window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        ) {
-          targets.forEach((el) => el.setAttribute('data-inview', ''));
-          return;
-        }
-
-        const io = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (!entry.isIntersecting) continue;
-              entry.target.setAttribute('data-inview', '');
-              io.unobserve(entry.target);
-            }
-          },
-          { rootMargin: '0px 0px -8% 0px' },
-        );
-
-        targets.forEach((el) => io.observe(el));
-      }
-
-      observe();
-      document.addEventListener('astro:after-swap', observe);
-    </script>
 
     <style is:global>
       /* Locked motion budget: 120ms page cross-fade, nothing more. */

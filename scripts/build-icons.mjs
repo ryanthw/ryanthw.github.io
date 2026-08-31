@@ -116,6 +116,62 @@ const D = (dir, file, label) => {
   };
 };
 
+/**
+ * Hand-authored and extracted marks, for technologies neither package covers.
+ *
+ * Same shape as a Simple Icon, so they go through `fit()` and are audited by
+ * `npm run contrast` like everything else. `viewBox` is optional and defaults
+ * to the 24x24 grid Simple Icons uses.
+ *
+ *  - SQL and Assembly have no logo to license: SQL is an ISO standard and
+ *    "assembly" is a family of languages. Both are drawn here, in-house, on the
+ *    Simple Icons grid. (AssemblyScript and WebAssembly exist in the packages
+ *    but are different technologies — using either would be a lie.)
+ *  - Observe is a real company mark, lifted from their own wordmark SVG and
+ *    reduced to the arc-over-ring glyph. Nominative use, brand colour intact.
+ */
+const C = ({ label, path, hex, note, viewBox }) => ({
+  label,
+  src: 'si',
+  path,
+  dark: fit(hex, SURFACE_DARK),
+  light: fit(hex, SURFACE_LIGHT),
+  raw: '#' + expand(hex),
+  ...(note ? { note } : {}),
+  ...(viewBox ? { viewBox } : {}),
+});
+
+const CUSTOM = {
+  sql: {
+    label: 'SQL',
+    hex: '#7BA7D4',
+    path: [
+      'M12 2C7.03 2 3 3.343 3 5v14c0 1.657 4.03 3 9 3s9-1.343 9-3V5c0-1.657-4.03-3-9-3z',
+      'M12 3.4c3.866 0 7 .717 7 1.6s-3.134 1.6-7 1.6S5 5.883 5 5s3.134-1.6 7-1.6z',
+      'M5 9.06c1.79.9 4.28 1.34 7 1.34s5.21-.44 7-1.34v1.98c-1.79.9-4.28 1.34-7 1.34s-5.21-.44-7-1.34V9.06z',
+      'M5 15.06c1.79.9 4.28 1.34 7 1.34s5.21-.44 7-1.34v1.98c-1.79.9-4.28 1.34-7 1.34s-5.21-.44-7-1.34v-1.98z',
+    ].join(' '),
+  },
+  assembly: {
+    label: 'Assembly',
+    note: 'x86 · LC-3',
+    hex: '#9AA4B8',
+    path: [
+      'M9 1h1.6v2.4H9zM13.4 1H15v2.4h-1.6zM9 20.6h1.6V23H9zM13.4 20.6H15V23h-1.6z',
+      'M1 9h2.4v1.6H1zM1 13.4h2.4V15H1zM20.6 9H23v1.6h-2.4zM20.6 13.4H23V15h-2.4z',
+      'M5 3.4h14a1.6 1.6 0 0 1 1.6 1.6v14a1.6 1.6 0 0 1-1.6 1.6H5A1.6 1.6 0 0 1 3.4 19V5A1.6 1.6 0 0 1 5 3.4z',
+      'M8.2 8.2h7.6v7.6H8.2z',
+    ].join(' '),
+  },
+  observe: {
+    label: 'Observe',
+    hex: '#00A259',
+    viewBox: '0 0 27 30',
+    path:
+      'M0 5.307l2.796 2.785A15.069 15.069 0 0 1 13.18 4.008 15.068 15.068 0 0 1 23.53 8.183l2.696-2.881a18.851 18.851 0 0 0-13.114-5.3A18.851 18.851 0 0 0 0 5.308v-.001z M5.247 15.493a9.321 9.321 0 0 1 3.272-3.399 8.565 8.565 0 0 1 8.98 0 9.495 9.495 0 0 1 3.295 3.412 9.275 9.275 0 0 1 .938 6.968 9.306 9.306 0 0 1-4.222 5.632 8.772 8.772 0 0 1-8.991.013 9.069 9.069 0 0 1-3.272-3.35 9.523 9.523 0 0 1 0-9.276zm2.51 7.857a6.331 6.331 0 0 0 2.234 2.34c.93.58 2.005.882 3.1.873a5.637 5.637 0 0 0 3.043-.857 6.208 6.208 0 0 0 2.185-2.341 6.92 6.92 0 0 0-.012-6.515 6.314 6.314 0 0 0-2.22-2.366 5.848 5.848 0 0 0-6.145 0 6.254 6.254 0 0 0-2.197 2.366 6.742 6.742 0 0 0-.808 3.263 6.52 6.52 0 0 0 .82 3.237z',
+  },
+};
+
 /** No logo exists — a mono monogram tile. */
 const T = (label, note) => ({ label, src:'txt', note: note||'' });
 
@@ -123,7 +179,7 @@ const groups = [
   { name:'Languages', items:[
     S('Python'), D('java','java-original.svg','Java'), S('C'), S('TypeScript'), S('JavaScript'),
     D('matlab','matlab-original.svg','MATLAB'), S('TradingView','Pine Script'),
-    S('HTML5','HTML'), S('CSS'), S('LaTeX'), T('Assembly','x86 · LC-3'), T('SQL')
+    S('HTML5','HTML'), S('CSS'), S('LaTeX'), C(CUSTOM.assembly), C(CUSTOM.sql)
   ]},
   { name:'ML & Data', items:[
     S('PyTorch'), S('NumPy'), S('SciPy'), D('matplotlib','matplotlib-original.svg','Matplotlib'),
@@ -140,7 +196,7 @@ const groups = [
     S('Terraform'), S('Docker'), S('Vercel'), S('Supabase'), S('PostgreSQL'), S('SQLite'), S('PythonAnywhere')
   ]},
   { name:'Tools & Observability', items:[
-    S('Git'), S('GitHub'), S('Datadog'), T('Observe'), S('JUnit5','JUnit'),
+    S('Git'), S('GitHub'), S('Datadog'), C(CUSTOM.observe), S('JUnit5','JUnit'),
     S('Google','Google OR-Tools'), S('Dialogflow','Dialogflow CX'), T('Finnhub API'), T('YFinance')
   ]}
 ].map(g => ({ ...g, items: g.items.filter(Boolean) }));
