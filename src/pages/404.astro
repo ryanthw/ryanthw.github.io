@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/*
+ * GitHub Pages serves /404.html for any unmatched path, so this needs no
+ * routing config — it just has to exist at the root of the build.
+ */
+const links = [
+  { label: 'Home', href: '/' },
+  { label: 'Projects', href: '/projects/' },
+  { label: 'Experience', href: '/experience/' },
+  { label: 'Connect', href: '/connect/' },
+];
+---
+
+<BaseLayout
+  title="Page not found"
+  description="That page does not exist — here is the way back."
+>
+  <div class="wrap">
+    <section class="lost">
+      <p class="eyebrow" data-animate>Error 404</p>
+      <h1 data-animate>Nothing here</h1>
+      <p class="lede" data-animate>
+        That address does not match a page on this site. It may have moved, or the
+        link may have been mistyped.
+      </p>
+
+      <nav class="ways" aria-label="Suggested pages" data-animate>
+        {links.map((l) => <a href={l.href}>{l.label} →</a>)}
+      </nav>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .lost {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 96px 0 120px;
+    max-width: 56ch;
+  }
+
+  h1 {
+    font-weight: 800;
+    font-size: clamp(42px, 7.4vw, 64px);
+    line-height: 0.98;
+    letter-spacing: -0.034em;
+    text-transform: uppercase;
+  }
+
+  .lede {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--prose);
+  }
+
+  .ways {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    padding-top: 10px;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  @media (max-width: 860px) {
+    .lost { padding: 56px 0 80px; }
+  }
+</style>

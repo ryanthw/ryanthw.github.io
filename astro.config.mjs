@@ -11,6 +11,12 @@ export default defineConfig({
   // Matching that here keeps dev identical to prod and saves a redirect hop.
   trailingSlash: 'always',
   integrations: [sitemap()],
+  build: {
+    // Both stylesheets together are ~5 KB. Inlining them removes the two
+    // render-blocking requests Lighthouse flags; there is no cross-page cache
+    // worth protecting at that size.
+    inlineStylesheets: 'always',
+  },
   vite: {
     plugins: [tailwindcss()],
   },

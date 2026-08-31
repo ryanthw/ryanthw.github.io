@@ -42,6 +42,22 @@ interface Props {
 
 const { label, size = 25, monochrome = false, class: className } = Astro.props;
 
+/**
+ * Inline SVG ids are document-global, and a Devicon mark carries its own
+ * gradient defs. The dual-theme marks emit the same markup twice, so without
+ * this the two variants collide on `matlab-original-a` and friends — invalid
+ * HTML, and a rendering hazard the moment two instances differ. Namespacing per
+ * instance also makes it safe to render the same icon more than once on a page.
+ */
+let instances = 0;
+
+const namespaceIds = (svg: string, suffix: string) =>
+  svg
+    .replace(/\bid="([^"]+)"/g, (_m, id) => `id="${id}-${suffix}"`)
+    .replace(/url\(#([^)]+)\)/g, (_m, id) => `url(#${id}-${suffix})`)
+    .replace(/\b(xlink:href|href)="#([^"]+)"/g, (_m, attr, id) => `${attr}="#${id}-${suffix}"`);
+
+
 const icon = registry.get(label.toLowerCase());
 
 if (!icon) {
@@ -64,6 +80,11 @@ const initials = (s: string) =>
     .toUpperCase();
 
 const box = `${size}px`;
+
+const uid = `i${(instances += 1)}`;
+const plateSvg = icon.src === 'dv' && icon.plate ? namespaceIds(icon.svg, uid) : '';
+const darkSvg = icon.src === 'dv' && !icon.plate ? namespaceIds(icon.svgDark, `${uid}d`) : '';
+const lightSvg = icon.src === 'dv' && !icon.plate ? namespaceIds(icon.svgLight, `${uid}l`) : '';
 ---
 
 {
@@ -89,7 +110,7 @@ const box = `${size}px`;
       style={`width:${box};height:${box}`}
       role="img"
       aria-label={icon.label}
-      set:html={icon.svg}
+      set:html={plateSvg}
     />
   )
 }
@@ -102,8 +123,8 @@ const box = `${size}px`;
       role="img"
       aria-label={icon.label}
     >
-      <span class="dv dv--dark" aria-hidden="true" set:html={icon.svgDark} />
-      <span class="dv dv--light" aria-hidden="true" set:html={icon.svgLight} />
+      <span class="dv dv--dark" aria-hidden="true" set:html={darkSvg} />
+      <span class="dv dv--light" aria-hidden="true" set:html={lightSvg} />
     </span>
   )
 }

@@ -8,7 +8,7 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
-  /** Falls back to the site-wide OG image once one exists (session 5). */
+  /** Overrides the site-wide card. Path is resolved against `site`. */
   ogImage?: string;
 }
 
@@ -17,7 +17,8 @@ const { title, description, ogImage } = Astro.props;
 const SITE_NAME = 'Ryan Walker';
 const fullTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const og = ogImage ? new URL(ogImage, Astro.site).href : undefined;
+/* Regenerate with `npm run og` — see scripts/build-og.mjs. */
+const og = new URL(ogImage ?? '/og.png', Astro.site).href;
 ---
 
 <html lang="en" data-theme="dark">
@@ -25,6 +26,15 @@ const og = ogImage ? new URL(ogImage, Astro.site).href : undefined;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!--
+      theme-color has no CSS-variable form, so these two are the only raw hex
+      outside src/styles/global.css. They mirror --canvas in each theme; if the
+      palette moves, move them too.
+    -->
+    <meta name="theme-color" content="#0B1328" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F9FAFC" media="(prefers-color-scheme: light)" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="canonical" href={canonical.href} />
 
@@ -37,8 +47,11 @@ const og = ogImage ? new URL(ogImage, Astro.site).href : undefined;
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical.href} />
-    {og && <meta property="og:image" content={og} />}
-    <meta name="twitter:card" content={og ? 'summary_large_image' : 'summary'} />
+    <meta property="og:image" content={og} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE_NAME} — ${description}`} />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <!--
       Theme resolution must run before first paint, or a light-mode visitor
@@ -90,6 +103,20 @@ const og = ogImage ? new URL(ogImage, Astro.site).href : undefined;
         }
       })();
     </script>
+
+    <!--
+      [data-animate] starts at opacity 0 and is revealed by the observer below.
+      With scripting off nothing would ever reveal it, so the page would render
+      blank. This is the belt for that brace.
+    -->
+    <noscript>
+      <style>
+        [data-animate] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
 
     <Font cssVariable="--font-display" preload />
     <Font cssVariable="--font-body" preload />

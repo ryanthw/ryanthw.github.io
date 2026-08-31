@@ -16,15 +16,17 @@ Astro + Tailwind CSS, statically built and deployed to GitHub Pages by
 | `npm run check` | Astro + TypeScript diagnostics |
 | `npm run icons` | Regenerate `src/data/icons.json` and merge `src/data/skills.json` |
 | `npm run contrast` | Audit every token pair against WCAG AA in both themes (runs in CI) |
+| `npm run og` | Regenerate `public/og.png`, the social card. Needs network; run by hand and commit the PNG |
 
 ## Layout
 
 ```
 design/            Approved artboards (.dc.html) + the icon generator they came from
-public/            Static assets served as-is (favicon, résumé PDF)
+public/            Served as-is: favicon, apple-touch-icon, og.png, robots.txt, résumé PDF
 scripts/
   build-icons.mjs   Simple Icons + Devicon -> src/data/icons.json, src/data/skills.json
   check-contrast.mjs Contrast audit over the shipped tokens
+  build-og.mjs      Social card -> public/og.png (satori + resvg, real fonts)
 src/
   assets/          Images Astro optimises at build time (headshot)
   components/      Nav, Footer, ThemeToggle, TechIcon, PageHeader

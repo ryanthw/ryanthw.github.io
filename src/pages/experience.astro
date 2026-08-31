@@ -33,7 +33,7 @@ const dates = (start: string, end?: string) => {
           <details id={`job-${job.id}`} class="card" open={job.data.defaultOpen} data-animate>
             <summary>
               <span class="who">
-                <span class="role">{job.data.role}</span>
+                <h2 class="role">{job.data.role}</h2>
                 <span class="org">
                   {job.data.company} &nbsp;·&nbsp; {job.data.location}
                 </span>
@@ -176,11 +176,13 @@ const dates = (start: string, end?: string) => {
     gap: 3px;
   }
 
+  /* A heading, so the accordion reads h1 -> h2 -> h3 in document order.
+     <summary> may contain heading content per the HTML spec. */
   .role {
-    font-family: var(--font-display), sans-serif;
     font-weight: 700;
     font-size: 19px;
     letter-spacing: -0.012em;
+    line-height: 1.3;
   }
 
   .org,

@@ -21,7 +21,9 @@ const isActive = (href: string) => {
 
 <header class="nav">
   <nav class="shell" aria-label="Primary">
-    <a href="/" class="mark" aria-label="Ryan Walker — home">RW<span>.</span></a>
+    <!-- The accessible name has to contain the visible text, or voice control
+         cannot target it ("click RW"). Hidden text rather than an aria-label. -->
+    <a href="/" class="mark">RW<span>.</span><span class="sr-only"> — Ryan Walker, home</span></a>
 
     <div class="right">
       <ul class="links">
