@@ -16,6 +16,7 @@ stack:
   - Python
   - Streamlit
 repo: https://github.com/ryanthw/risk-dashboard-react
+live: https://risk-dashboard-react.vercel.app
 highlights:
   - label: TWR
     detail: Time-weighted return, stripping out contributions
