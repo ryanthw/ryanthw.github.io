@@ -517,10 +517,22 @@
     }
   },
   {
+    "id": "jenkins",
+    "label": "Jenkins",
+    "group": "Tools & Observability",
+    "order": 42,
+    "usedIn": {
+      "jobs": [
+        "sonatype"
+      ],
+      "projects": []
+    }
+  },
+  {
     "id": "datadog",
     "label": "Datadog",
     "group": "Tools & Observability",
-    "order": 42,
+    "order": 43,
     "usedIn": {
       "jobs": [
         "sonatype"
@@ -532,7 +544,7 @@
     "id": "observe",
     "label": "Observe",
     "group": "Tools & Observability",
-    "order": 43,
+    "order": 44,
     "usedIn": {
       "jobs": [
         "sonatype"
@@ -544,7 +556,7 @@
     "id": "junit",
     "label": "JUnit",
     "group": "Tools & Observability",
-    "order": 44,
+    "order": 45,
     "usedIn": {
       "jobs": [],
       "projects": []
@@ -554,7 +566,7 @@
     "id": "google-or-tools",
     "label": "Google OR-Tools",
     "group": "Tools & Observability",
-    "order": 45,
+    "order": 46,
     "usedIn": {
       "jobs": [],
       "projects": []
@@ -564,7 +576,7 @@
     "id": "dialogflow-cx",
     "label": "Dialogflow CX",
     "group": "Tools & Observability",
-    "order": 46,
+    "order": 47,
     "usedIn": {
       "jobs": [],
       "projects": []
@@ -574,7 +586,7 @@
     "id": "finnhub-api",
     "label": "Finnhub API",
     "group": "Tools & Observability",
-    "order": 47,
+    "order": 48,
     "usedIn": {
       "jobs": [
         "personal-portfolio-management"
@@ -588,7 +600,7 @@
     "id": "yfinance",
     "label": "YFinance",
     "group": "Tools & Observability",
-    "order": 48,
+    "order": 49,
     "usedIn": {
       "jobs": [
         "personal-portfolio-management"

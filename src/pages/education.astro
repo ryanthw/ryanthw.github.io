@@ -42,7 +42,7 @@ const facts = [
   <div class="wrap">
     <PageHeader eyebrow="Education" title="Georgia Tech" />
 
-    <section class="degree" data-animate>
+    <section class="degree" data-animate="fade">
       <div class="detail">
         <div class="title">
           <h2>BS Computer Science</h2>
@@ -84,8 +84,8 @@ const facts = [
 
       <ol class="terms">
         {
-          terms.map((term) => (
-            <li class="term" data-animate>
+          terms.map((term, i) => (
+            <li class="term" data-animate style={`--i:${i}`}>
               <div class="term-label">
                 <span class:list={['term-name', term.inProgress && 'term-name--live']}>
                   {term.name}
@@ -200,17 +200,24 @@ const facts = [
     display: flex;
     flex-direction: column;
     gap: 3px;
+    transition: background-color var(--dur-base) var(--ease-out-soft);
   }
+
+  .cell:hover { background: var(--surface); }
 
   .cell--link { padding: 14px 18px; }
 
   .cell--link a {
+    display: inline-block;
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 11px;
     letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--accent);
+    transition: transform var(--dur-base) var(--ease-out-back);
   }
+
+  .cell--link a:hover { transform: translateX(4px); }
 
   .figure {
     font-family: var(--font-display), sans-serif;
@@ -218,6 +225,17 @@ const facts = [
     font-size: 30px;
     letter-spacing: -0.02em;
     line-height: 1.1;
+    /* A flex item, so it stretches the full cell width — scaling from the
+       centre would drag the digits leftward. Grow from where they start. */
+    transform-origin: 0 50%;
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .cell:hover .figure { transform: scale(1.06); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cell:hover .figure,
+    .cell--link a:hover { transform: none; }
   }
 
   .figure--accent { color: var(--accent); }
@@ -266,7 +284,14 @@ const facts = [
     padding: 20px 0;
     border-bottom: 1px solid var(--hairline);
     align-items: start;
+    transition: border-color var(--dur-base) var(--ease-out-soft);
   }
+
+  .term:hover { border-bottom-color: var(--monogram-border); }
+
+  .term:hover .term-name { color: var(--accent); }
+
+  .term-name { transition: color var(--dur-quick) var(--ease-out-soft); }
 
   .term-label {
     display: flex;
@@ -312,6 +337,20 @@ const facts = [
     border: 1px solid var(--hairline);
     border-radius: 2px;
     padding: 5px 10px;
+    transition:
+      border-color var(--dur-quick) var(--ease-out-soft),
+      color var(--dur-quick) var(--ease-out-soft),
+      transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .course:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .course:hover { transform: none; }
   }
 
   /* The courses this audience reads for. Everything else stays quiet. */

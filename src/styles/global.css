@@ -29,6 +29,11 @@
   --on-accent:#0B1328;  /* text on a filled accent surface        */
   --monogram-border: #37456B; /* monogram tiles on the Stack grid */
   --icon-plate: #E8EAF0;      /* backing for polychrome logos            */
+
+  /* Hover elevation. Not a colour role — `npm run contrast` only parses the
+     hex-valued tokens, so these are skipped by the audit by construction. */
+  --lift:  0 12px 26px -16px rgb(0 0 0 / 0.72);
+  --glow:  0 0 0 1px color-mix(in srgb, var(--accent) 42%, transparent);
 }
 
 [data-theme="light"] {
@@ -45,6 +50,9 @@
   --on-accent:#F9FAFC;
   --monogram-border: #C9D0DD;
   --icon-plate: #FFFFFF;
+
+  --lift:  0 12px 26px -16px rgb(16 19 26 / 0.26);
+  --glow:  0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
 /* `inline` keeps the var reference live at the use site, so a theme swap on
@@ -69,13 +77,34 @@
 
   --container-shell: 1120px;
 
-  /* Motion budget — LOCKED. Nothing outside these three durations. */
+  /*
+    Motion. The budget was previously locked to a single 120/150/180ms fade;
+    Ryan asked for a more dynamic feel on 2026-08-31, so it now runs on a small
+    scale of durations and two curves. Everything still resolves to a token —
+    no raw durations or curves in component styles.
+
+      --dur-quick  colour, border, opacity on hover — must feel instant
+      --dur-base   transforms on hover, accordion reveals
+      --dur-slow   entrance animations, where the travel needs room to read
+
+    --ease-out-soft is the original curve and stays the default for colour.
+    --ease-out-back overshoots by a hair, which is what makes a lift or a
+    reveal read as arrival rather than as a fade.
+  */
+  --dur-quick: 120ms;
+  --dur-base:  220ms;
+  --dur-slow:  460ms;
   --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out-back: cubic-bezier(0.18, 1.06, 0.38, 1);
 }
 
 @layer base {
   html {
     background: var(--canvas);
+    /* The nav is sticky (68px). Without this, every hash landing — the Stack
+       page's /experience/#job-<id> links, the skip link, scrollIntoView in the
+       accordion — parks its target underneath the bar. */
+    scroll-padding-top: 84px;
   }
 
   body {
@@ -160,42 +189,102 @@
   }
 }
 
-/*
-  Motion budget: 8px fade-up on scroll-in, 150ms.
-
-  This was a JS IntersectionObserver that set [data-inview]. That shipped a real
-  bug: the hidden state applied at first paint, but the observer lived in a
-  deferred module, so every animated element stayed invisible until the whole
-  document had parsed and the module had run. On Stack (144 KB of inline SVG)
-  and Projects that is long enough to read as a broken page.
-
-  A view() timeline fixes it by construction. The animation's progress is a
-  function of scroll position, resolved by the compositor at first paint — an
-  element already on screen is past the end of its range, so it renders at its
-  final state immediately. Nothing is ever hidden waiting for script.
-
-  No @supports guard, deliberately. A browser that does not know
-  `animation-timeline` drops that one declaration and runs `rise` on the default
-  document timeline instead — so the page fades up once on load rather than per
-  element on scroll. Both outcomes are fine; neither can leave content hidden.
-  (Lightning CSS strips a redundant @supports here anyway, so writing one would
-  only have misled the next reader.)
-*/
+/* ------------------------------------------------------------------------ *
+ * Entrances
+ *
+ * Two systems, and the difference between them matters:
+ *
+ *   [data-reveal]  time-driven, for content that is already on screen at first
+ *                  paint — the home hero, every page header. A scroll timeline
+ *                  CANNOT animate these: an element sitting in the viewport at
+ *                  scroll 0 is already past the end of its entry range, so it
+ *                  renders final-state and never moves. That is why the hero
+ *                  had stopped animating once the observer came out.
+ *
+ *   [data-animate] scroll-driven via view(), for everything below the fold.
+ *                  Progress is a function of scroll position, resolved by the
+ *                  compositor at first paint, so an element that is already on
+ *                  screen renders finished instead of waiting on script. This
+ *                  replaced an IntersectionObserver that left Stack (144 KB of
+ *                  inline SVG) and Projects blank until a deferred module ran.
+ *                  Do not reintroduce one.
+ *
+ * Both stagger on `--i`, a unitless index set inline by the template. The two
+ * do it differently because they run on different clocks: [data-reveal] delays
+ * in milliseconds, [data-animate] cannot — `animation-delay` is meaningless on
+ * a scroll timeline, so the offset has to move the RANGE rather than the clock.
+ *
+ * The plain `animation-range` is declared before the calc() one on purpose. If
+ * a browser cannot parse calc() in a range offset it drops that declaration and
+ * keeps the first; without the pair, a dropped range would fall back to the
+ * `cover` default and leave mid-viewport elements stuck part-faded.
+ *
+ * No @supports guard anywhere here. A browser without `animation-timeline`
+ * drops that one declaration and runs the same keyframes on the document
+ * timeline, which degrades to a single fade-up on load. Both outcomes are fine;
+ * neither can leave content hidden.
+ * ------------------------------------------------------------------------ */
 @media (prefers-reduced-motion: no-preference) {
-  [data-animate] {
-    animation: rise 150ms var(--ease-out-soft) both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 25%;
+  [data-reveal] {
+    animation: rise var(--dur-slow) var(--ease-out-back) both;
+    animation-delay: calc(min(var(--i, 0), 8) * 65ms);
   }
+
+  [data-animate] {
+    animation: rise var(--dur-slow) var(--ease-out-back) both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 38%;
+    animation-range:
+      entry calc(min(var(--i, 0), 6) * 5%)
+      entry calc(38% + min(var(--i, 0), 6) * 5%);
+  }
+
+  /* Direction variants, for sections that read better arriving off-axis than
+     rising. `[data-animate]` above already set every other property. */
+  [data-reveal='left'],
+  [data-animate='left'] { animation-name: rise-left; }
+
+  [data-reveal='right'],
+  [data-animate='right'] { animation-name: rise-right; }
+
+  [data-reveal='fade'],
+  [data-animate='fade'] { animation-name: appear; }
 }
 
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translate3d(0, 18px, 0) scale(0.985);
   }
   to {
     opacity: 1;
     transform: none;
   }
+}
+
+@keyframes rise-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-22px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rise-right {
+  from {
+    opacity: 0;
+    transform: translate3d(22px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes appear {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }

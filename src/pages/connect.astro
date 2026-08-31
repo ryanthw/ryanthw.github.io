@@ -56,16 +56,20 @@ const facts = [
       lede="Looking for software engineering internships and new-grad roles — particularly where systems work meets quantitative problems."
     />
 
+    {/* The cells reveal with `fade` rather than the default rise: .grid clips
+        (overflow: hidden) to keep the hairline seams clean, so a translate
+        would be cut off mid-reveal. */}
     <ul class="grid">
       {
-        links.map((l) => (
+        links.map((l, i) => (
           <li>
             <a
               class="link"
               href={l.href}
               target={l.external ? '_blank' : undefined}
               rel={l.external ? 'noopener noreferrer' : undefined}
-              data-animate
+              data-animate="fade"
+              style={`--i:${i % 2}`}
             >
               <span class="top">
                 <span class="label">{l.label}</span>
@@ -109,7 +113,12 @@ const facts = [
     padding: 0;
   }
 
+  /* These cells sit on hairline gaps, so they cannot lift — a translate would
+     tear the seam between them. The gesture is inside the cell instead: the
+     ground shifts, a gold rule wipes across the top edge, and the arrow leaves
+     in the direction the link goes. */
   .link {
+    position: relative;
     background: var(--surface);
     padding: 26px;
     display: flex;
@@ -117,10 +126,38 @@ const facts = [
     gap: 8px;
     min-height: 130px;
     height: 100%;
-    transition: background-color 120ms var(--ease-out-soft);
+    transition: background-color var(--dur-base) var(--ease-out-soft);
   }
 
-  .link:hover { background: var(--canvas); }
+  .link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .link:hover,
+  .link:focus-visible { background: var(--canvas); }
+
+  .link:hover::before,
+  .link:focus-visible::before { transform: scaleX(1); }
+
+  .link:hover .handle { color: var(--accent); }
+
+  .link:hover .arrow {
+    color: var(--accent);
+    transform: translate(3px, -3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .link:hover .arrow { transform: none; }
+  }
 
   .top {
     display: flex;
@@ -137,9 +174,13 @@ const facts = [
   }
 
   .arrow {
+    display: inline-block;
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 13px;
     color: var(--faint);
+    transition:
+      color var(--dur-quick) var(--ease-out-soft),
+      transform var(--dur-base) var(--ease-out-back);
   }
 
   .handle {
@@ -148,6 +189,7 @@ const facts = [
     font-size: 19px;
     letter-spacing: -0.012em;
     overflow-wrap: anywhere;
+    transition: color var(--dur-quick) var(--ease-out-soft);
   }
 
   .note {

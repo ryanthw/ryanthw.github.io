@@ -20,10 +20,18 @@ const isActive = (href: string) => {
 ---
 
 <header class="nav">
+  <!-- Reading progress. Pure CSS: a scroll() timeline drives scaleX, so there
+       is no scroll listener and nothing to re-bind after a view transition.
+       A browser without animation-timeline leaves it at scaleX(0) — invisible,
+       which is the right degradation for a decorative indicator. -->
+  <div class="progress" aria-hidden="true"></div>
+
   <nav class="shell" aria-label="Primary">
     <!-- The accessible name has to contain the visible text, or voice control
          cannot target it ("click RW"). Hidden text rather than an aria-label. -->
-    <a href="/" class="mark">RW<span>.</span><span class="sr-only"> — Ryan Walker, home</span></a>
+    <a href="/" class="mark"
+      >RW<span class="dot">.</span><span class="sr-only"> — Ryan Walker, home</span></a
+    >
 
     <div class="right">
       <ul class="links">
@@ -43,9 +51,56 @@ const isActive = (href: string) => {
 </header>
 
 <style>
+  /* Sticky so the progress rail stays useful and the nav is always reachable.
+     z-index sits under the skip link's 100 on purpose. */
   .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
     border-bottom: 1px solid var(--hairline);
-    background: var(--canvas);
+    background: color-mix(in srgb, var(--canvas) 84%, transparent);
+    backdrop-filter: blur(12px) saturate(1.4);
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  }
+
+  /* No backdrop-filter (or no color-mix) means the translucent ground would
+     let content show through the bar. Fall back to the opaque canvas. */
+  @supports not (backdrop-filter: blur(1px)) {
+    .nav { background: var(--canvas); }
+  }
+
+  .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+
+  /* The timeline is deliberately in a SEPARATE rule from the shorthand.
+     Written together, the CSS minifier folds them into
+     `animation: linear both track scroll(root)` — and a timeline is not a
+     valid component of the `animation` shorthand, so Chrome drops the whole
+     declaration and the rail sits dead at scaleX(0). Two rules cannot be
+     merged (different selectors), and the more specific one re-sets the
+     timeline the shorthand had reset to `auto`. Verified in Chrome: with them
+     in one rule, getComputedStyle reports animation-name: none. */
+  @media (prefers-reduced-motion: no-preference) {
+    .progress {
+      animation: track linear both;
+    }
+
+    .nav .progress {
+      animation-timeline: scroll(root block);
+    }
+  }
+
+  @keyframes track {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
   }
 
   .shell {
@@ -67,7 +122,15 @@ const isActive = (href: string) => {
     color: var(--text);
   }
 
-  .mark span { color: var(--accent); }
+  .mark .dot {
+    display: inline-block;
+    color: var(--accent);
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
+  /* The period is the only mark on the page, so it is the one thing that gets
+     to move: it hops when you point at it. */
+  .mark:hover .dot { transform: translateY(-3px) scale(1.35); }
 
   .right {
     display: flex;
@@ -87,8 +150,34 @@ const isActive = (href: string) => {
     text-transform: uppercase;
   }
 
-  .links a { color: var(--muted); }
+  /* A gold rule that wipes in from the left on hover, and stays put on the
+     current page — the active state and the hover state are the same gesture,
+     which is what makes the nav feel connected rather than decorated. */
+  .links a {
+    position: relative;
+    display: inline-block;
+    color: var(--muted);
+    padding-bottom: 2px;
+  }
+
+  .links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
   .links a:hover { color: var(--accent); }
+
+  .links a:hover::after,
+  .links a:focus-visible::after,
+  .links a[aria-current='page']::after { transform: scaleX(1); }
 
   .links a[aria-current='page'] { color: var(--text); }
 

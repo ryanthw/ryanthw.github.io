@@ -89,10 +89,14 @@ const linked = tiles.filter((t) => t.href).length;
           <ul class="grid">
             {tiles
               .filter((t) => t.skill.data.group === group)
-              .map(({ skill, href, label }) => {
+              .map(({ skill, href, label }, i) => {
                 const Tag = href ? 'a' : 'div';
+                /* Stagger by column, not by position in the group: the grid is
+                   five wide at desktop, so `i % 5` makes each row cascade
+                   left-to-right instead of the offset growing without bound
+                   down a twelve-item group. */
                 return (
-                  <li data-animate>
+                  <li data-animate style={`--i:${i % 5}`}>
                     <Tag
                       class:list={['tile', href && 'tile--linked']}
                       href={href}
@@ -148,12 +152,13 @@ const linked = tiles.filter((t) => t.href).length;
 
   .group:first-of-type { border-top: 0; }
 
+  /* Clears the sticky nav (68px) plus the original 24px of breathing room. */
   .group-head {
     display: flex;
     flex-direction: column;
     gap: 6px;
     position: sticky;
-    top: 24px;
+    top: 92px;
   }
 
   .group-head h2 {
@@ -194,7 +199,10 @@ const linked = tiles.filter((t) => t.href).length;
     gap: 9px;
     text-align: center;
     min-height: 92px;
-    transition: border-color 120ms var(--ease-out-soft);
+    transition:
+      border-color var(--dur-quick) var(--ease-out-soft),
+      transform var(--dur-base) var(--ease-out-back),
+      box-shadow var(--dur-base) var(--ease-out-soft);
   }
 
   /* A linked tile carries the accent dot the legend explains. */
@@ -207,16 +215,43 @@ const linked = tiles.filter((t) => t.href).length;
     height: 4px;
     border-radius: 50%;
     background: var(--accent);
+    transition: transform var(--dur-base) var(--ease-out-back);
   }
 
-  .tile--linked:hover { border-color: var(--accent); }
-  .tile--linked:hover .label { color: var(--accent); }
+  /* Only a linked tile lifts. The others are <div>s with nothing behind them,
+     so moving them would promise a click that does not exist — they get the
+     mark scale and nothing more. */
+  .tile--linked:hover,
+  .tile--linked:focus-visible {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: var(--lift);
+  }
+
+  .tile--linked:hover .label,
+  .tile--linked:focus-visible .label { color: var(--accent); }
+
+  .tile--linked:hover::after { transform: scale(1.8); }
 
   .mark {
     height: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .tile:hover .mark { transform: scale(1.16); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile,
+    .mark,
+    .tile--linked::after { transition-duration: 1ms; }
+
+    .tile--linked:hover,
+    .tile--linked:focus-visible { transform: none; }
+
+    .tile:hover .mark { transform: none; }
   }
 
   .name {
@@ -229,7 +264,7 @@ const linked = tiles.filter((t) => t.href).length;
     font-size: 12.5px;
     color: var(--text);
     line-height: 1.25;
-    transition: color 120ms var(--ease-out-soft);
+    transition: color var(--dur-quick) var(--ease-out-soft);
   }
 
   .note {

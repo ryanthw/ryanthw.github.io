@@ -196,7 +196,7 @@ const groups = [
     S('Terraform'), S('Docker'), S('Vercel'), S('Supabase'), S('PostgreSQL'), S('SQLite'), S('PythonAnywhere')
   ]},
   { name:'Tools & Observability', items:[
-    S('Git'), S('GitHub'), S('Datadog'), C(CUSTOM.observe), S('JUnit5','JUnit'),
+    S('Git'), S('GitHub'), S('Jenkins'), S('Datadog'), C(CUSTOM.observe), S('JUnit5','JUnit'),
     S('Google','Google OR-Tools'), S('Dialogflow','Dialogflow CX'), T('Finnhub API'), T('YFinance')
   ]}
 ].map(g => ({ ...g, items: g.items.filter(Boolean) }));

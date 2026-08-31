@@ -29,8 +29,14 @@ const dates = (start: string, end?: string) => {
 
     <div class="stack">
       {
-        roles.map((job) => (
-          <details id={`job-${job.id}`} class="card" open={job.data.defaultOpen} data-animate>
+        roles.map((job, i) => (
+          <details
+            id={`job-${job.id}`}
+            class="card"
+            open={job.data.defaultOpen}
+            data-animate
+            style={`--i:${i}`}
+          >
             <summary>
               <span class="who">
                 <h2 class="role">{job.data.role}</h2>
@@ -91,8 +97,8 @@ const dates = (start: string, end?: string) => {
       <h2 class="eyebrow" data-animate>Leadership</h2>
       <div class="band-grid">
         {
-          leadership.map((job) => (
-            <article class="lead-card" data-animate>
+          leadership.map((job, i) => (
+            <article class="lead-card" data-animate style={`--i:${i}`}>
               <h3>
                 {job.data.role} — {job.data.company}
               </h3>
@@ -150,13 +156,40 @@ const dates = (start: string, end?: string) => {
   }
 
   .card {
+    position: relative;
+    overflow: hidden;
     background: var(--surface);
     border: 1px solid var(--hairline);
     border-radius: 3px;
-    transition: border-color 120ms var(--ease-out-soft);
+    transition: border-color var(--dur-quick) var(--ease-out-soft);
   }
 
+  /* A gold rule that grows down the left edge. Hover and open are the same
+     gesture here, the way they are in the nav — pointing at a card previews
+     the state that clicking it commits to. A row this wide should not lift;
+     the bar carries the feedback instead. */
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: 50% 0;
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .card:hover::before,
+  .card[open]::before { transform: scaleY(1); }
+
   .card[open] { border-color: var(--monogram-border); }
+
+  /* Deep links from the Stack page land here, so the target has to clear the
+     sticky nav. html { scroll-padding-top } covers the hash jump; this covers
+     scrollIntoView() in the accordion script. */
+  .card { scroll-margin-top: 84px; }
 
   summary {
     padding: 20px 24px;
@@ -202,8 +235,8 @@ const dates = (start: string, end?: string) => {
     border-bottom: 1.5px solid var(--faint);
     transform: rotate(45deg) translate(-2px, -2px);
     transition:
-      transform 180ms var(--ease-out-soft),
-      border-color 120ms var(--ease-out-soft);
+      transform var(--dur-base) var(--ease-out-back),
+      border-color var(--dur-quick) var(--ease-out-soft);
   }
 
   .card[open] .caret {
@@ -211,7 +244,19 @@ const dates = (start: string, end?: string) => {
     border-color: var(--accent);
   }
 
+  summary {
+    transition: background-color var(--dur-quick) var(--ease-out-soft);
+  }
+
+  summary:hover { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+
   summary:hover .role { color: var(--accent); }
+
+  /* .caret keeps its own transition above — restating it here would clobber
+     the transform half and kill the open/close rotation. */
+  .role { transition: color var(--dur-quick) var(--ease-out-soft); }
+
+  summary:hover .caret { border-color: var(--accent); }
 
   .body {
     padding: 0 24px 22px;
@@ -284,6 +329,20 @@ const dates = (start: string, end?: string) => {
     border-radius: 2px;
     padding: 4px 9px;
     background: var(--canvas);
+    transition:
+      color var(--dur-quick) var(--ease-out-soft),
+      border-color var(--dur-quick) var(--ease-out-soft),
+      transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .chip:hover {
+    color: var(--text);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chip:hover { transform: none; }
   }
 
   .links a {
@@ -325,6 +384,20 @@ const dates = (start: string, end?: string) => {
     flex-direction: column;
     gap: 9px;
     background: var(--surface);
+    transition:
+      border-color var(--dur-quick) var(--ease-out-soft),
+      transform var(--dur-base) var(--ease-out-back),
+      box-shadow var(--dur-base) var(--ease-out-soft);
+  }
+
+  .lead-card:hover {
+    border-color: var(--monogram-border);
+    transform: translateY(-4px);
+    box-shadow: var(--lift);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lead-card:hover { transform: none; }
   }
 
   .lead-card h3 {
@@ -347,18 +420,31 @@ const dates = (start: string, end?: string) => {
     line-height: 1.55;
   }
 
-  /* Opening reveal only — 180ms, inside the locked motion budget. Closing is
-     instant, which keeps this to CSS instead of a height-animation harness. */
+  /* Opening reveal only. Closing is instant, which keeps this to CSS instead
+     of a height-animation harness.
+
+     The body's children cascade rather than the body arriving as one block —
+     the rule, then each group, then the stack and the caveat. Delays are
+     written out because CSS has no arithmetic on :nth-child; six covers the
+     longest role (rule + four groups + stack + note) with one to spare, and a
+     seventh child would simply share the last delay. */
   @media (prefers-reduced-motion: no-preference) {
-    .card[open] .body {
-      animation: reveal 180ms var(--ease-out-soft);
+    .card[open] .body > * {
+      animation: reveal var(--dur-base) var(--ease-out-soft) both;
     }
+
+    .card[open] .body > :nth-child(1) { animation-delay: 0ms; }
+    .card[open] .body > :nth-child(2) { animation-delay: 45ms; }
+    .card[open] .body > :nth-child(3) { animation-delay: 90ms; }
+    .card[open] .body > :nth-child(4) { animation-delay: 135ms; }
+    .card[open] .body > :nth-child(5) { animation-delay: 180ms; }
+    .card[open] .body > :nth-child(n + 6) { animation-delay: 225ms; }
   }
 
   @keyframes reveal {
     from {
       opacity: 0;
-      transform: translateY(-4px);
+      transform: translateY(-6px);
     }
     to {
       opacity: 1;

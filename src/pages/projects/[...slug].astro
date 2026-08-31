@@ -28,23 +28,23 @@ const sections = [
 
 <BaseLayout title={data.title} description={data.tagline}>
   <div class="wrap">
-    <p class="back">
-      <a href="/projects/">← All projects</a>
+    <p class="back" data-reveal style="--i:0">
+      <a href="/projects/"><i class="arrow">←</i> All projects</a>
     </p>
 
-    <header class="head" data-animate>
-      <p class="meta">
+    <header class="head">
+      <p class="meta" data-reveal style="--i:1">
         <span class="cat">{data.categories.map((c) => LABEL[c]).join(' · ')}</span>
         <span class="sep" aria-hidden="true">·</span>
         <span class="year">{data.year}</span>
       </p>
 
-      <h1>{data.title}</h1>
-      <p class="tagline">{data.tagline}</p>
+      <h1 data-reveal style="--i:2">{data.title}</h1>
+      <p class="tagline" data-reveal style="--i:3">{data.tagline}</p>
 
       {
         (data.live || data.repo) && (
-          <div class="cta">
+          <div class="cta" data-reveal style="--i:4">
             {data.live && (
               <a
                 class="btn btn--solid"
@@ -79,7 +79,7 @@ const sections = [
           <h2 class="eyebrow">What it measures</h2>
           <ul class="measure-grid">
             {data.highlights.map((h) => (
-              <li>
+              <li class="measure">
                 <span class="k">{h.label}</span>
                 <span class="d">{h.detail}</span>
               </li>
@@ -92,8 +92,8 @@ const sections = [
     <div class="build">
       <div class="prose-col">
         {
-          sections.map((s) => (
-            <section class="section" data-animate>
+          sections.map((s, i) => (
+            <section class="section" data-animate style={`--i:${i}`}>
               <h2 class="eyebrow">{s.heading}</h2>
               <p>{s.body}</p>
             </section>
@@ -153,6 +153,14 @@ const sections = [
     color: var(--muted);
   }
 
+  .back .arrow {
+    display: inline-block;
+    font-style: normal;
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .back a:hover .arrow { transform: translateX(-4px); }
+
   .head {
     padding: 26px 0 34px;
     display: flex;
@@ -198,7 +206,11 @@ const sections = [
     flex-wrap: wrap;
   }
 
+  /* Same gold wipe as the home hero — see index.astro for the reasoning. */
   .btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 12px;
     letter-spacing: 0.08em;
@@ -208,11 +220,33 @@ const sections = [
     padding: 10px 18px;
     border-radius: 2px;
     transition:
-      color 120ms var(--ease-out-soft),
-      border-color 120ms var(--ease-out-soft);
+      color var(--dur-quick) var(--ease-out-soft),
+      border-color var(--dur-quick) var(--ease-out-soft),
+      transform var(--dur-base) var(--ease-out-back);
   }
 
-  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .btn:hover,
+  .btn:focus-visible {
+    border-color: var(--accent);
+    color: var(--on-accent);
+    transform: translateY(-2px);
+  }
+
+  .btn:hover::before,
+  .btn:focus-visible::before { transform: scaleX(1); }
+
+  .btn:active { transform: translateY(0); }
 
   .btn--solid {
     background: var(--accent);
@@ -221,19 +255,41 @@ const sections = [
     font-weight: 600;
   }
 
-  .btn--solid:hover { color: var(--on-accent); opacity: 0.88; }
+  .btn--solid::before { background: color-mix(in srgb, var(--accent) 80%, #fff); }
+
+  .btn--solid:hover,
+  .btn--solid:focus-visible {
+    color: var(--on-accent);
+    box-shadow: var(--lift);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    .btn::before { transition-duration: 1ms; }
+
+    .btn:hover,
+    .btn:focus-visible { transform: none; }
+  }
 
   .cover {
     margin: 0;
     border: 1px solid var(--hairline);
     border-radius: 3px;
     overflow: hidden;
+    transition: border-color var(--dur-base) var(--ease-out-soft);
   }
+
+  .cover:hover { border-color: var(--monogram-border); }
 
   .cover :global(img) {
     width: 100%;
     height: auto;
     display: block;
+    transition: transform var(--dur-slow) var(--ease-out-soft);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cover:hover :global(img) { transform: scale(1.02); }
   }
 
   .measures {
@@ -264,7 +320,11 @@ const sections = [
     flex-direction: column;
     gap: 6px;
     min-height: 104px;
+    transition: background-color var(--dur-base) var(--ease-out-soft);
   }
+
+  /* Clipped hairline seams again, so the feedback stays inside the cell. */
+  .measure-grid li:hover { background: var(--canvas); }
 
   .k {
     font-family: var(--font-mono), ui-monospace, monospace;
@@ -388,6 +448,25 @@ const sections = [
     gap: 9px;
     font-size: 13.5px;
     color: var(--prose);
+    transition:
+      color var(--dur-quick) var(--ease-out-soft),
+      transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .tech li:hover {
+    color: var(--text);
+    transform: translateX(4px);
+  }
+
+  .tech li :global(.tech-icon) {
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .tech li:hover :global(.tech-icon) { transform: scale(1.2); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tech li:hover,
+    .tech li:hover :global(.tech-icon) { transform: none; }
   }
 
   .shots {
@@ -401,7 +480,10 @@ const sections = [
     border: 1px solid var(--hairline);
     border-radius: 3px;
     overflow: hidden;
+    transition: border-color var(--dur-base) var(--ease-out-soft);
   }
+
+  .shots figure:hover { border-color: var(--accent); }
 
   .shots :global(img) {
     width: 100%;

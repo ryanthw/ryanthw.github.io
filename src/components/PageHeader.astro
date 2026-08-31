@@ -17,11 +17,14 @@ interface Props {
 const { eyebrow, title, lede, size = 'section', class: className } = Astro.props;
 ---
 
-<header class:list={['head', `head--${size}`, className]} data-animate>
-  <p class="eyebrow">{eyebrow}</p>
-  <h1>{title}</h1>
-  {lede && <p class="lede">{lede}</p>}
-  <slot />
+<!-- [data-reveal], not [data-animate]: a page header is on screen at first
+     paint, and a view() timeline resolves an element that is already in the
+     viewport to its finished state — it would never move. See global.css. -->
+<header class:list={['head', `head--${size}`, className]}>
+  <p class="eyebrow" data-reveal style="--i:0">{eyebrow}</p>
+  <h1 data-reveal style="--i:1">{title}</h1>
+  {lede && <p class="lede" data-reveal style="--i:2">{lede}</p>}
+  <div class="extra" data-reveal style="--i:3"><slot /></div>
 </header>
 
 <style>
@@ -34,6 +37,11 @@ const { eyebrow, title, lede, size = 'section', class: className } = Astro.props
   }
 
   .head p { margin: 0; }
+
+  /* Wrapper exists only to give slotted content its own reveal step. It must
+     not introduce a box: `display: contents` would drop the animation with it,
+     so it stays a flex item and inherits the header's own gap. */
+  .extra:empty { display: none; }
 
   h1 {
     font-weight: 800;

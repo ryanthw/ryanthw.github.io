@@ -12,6 +12,10 @@ groups:
     bullets:
       - Played a key role in migrating the Lifecycle product from EKS/Cloudy to ECS Fargate, improving the efficiency and scalability of its cloud footprint.
       - Managed AWS resources extensively with Terraform — deploying, managing and destroying personal instances of the product on ECS to support robust cloud testing inside the SDLC.
+  - heading: CI/CD
+    bullets:
+      - Hardened the Jenkins pipelines behind Lifecycle, tightening how builds are validated and gated before they can move downstream.
+      - Built new Jenkins deployment jobs so the team could deploy product instances straight from the pipeline instead of by hand.
   - heading: Observability
     bullets:
       - Assisted the transition from Datadog to the Observe platform, migrating and configuring the essential monitors and charts.
@@ -23,6 +27,7 @@ stack:
   - ECS Fargate
   - EKS
   - Terraform
+  - Jenkins
   - Observe
   - Datadog
   - Java

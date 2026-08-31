@@ -48,28 +48,30 @@ const stats = [
   description="Third-year CS at Georgia Tech — cloud infrastructure and tooling at Sonatype, and a production options-risk platform."
 >
   <div class="wrap">
-    {/* The hero fades in with everything else — Ryan's call, 2026-08-31. It
-        costs roughly 390ms of LCP render delay because the observer gates the
-        paint; the Lighthouse budget absorbs it. Removing data-animate from
-        these five elements is the revert. */}
+    {/* The hero animates on the document timeline, not a scroll timeline —
+        it is on screen at first paint, so view() would resolve it to its
+        finished state and nothing would move. Ryan chose to keep the fade
+        (2026-08-31) knowing it costs LCP render delay; the stagger adds the
+        last element's 260ms delay on top. Dropping data-reveal from these six
+        elements is the revert. */}
     <section class="hero">
       <div class="intro">
-        <p class="eyebrow lead" data-animate>
+        <p class="eyebrow lead" data-reveal style="--i:0">
           <span class="dot"></span>Software Engineer &nbsp;·&nbsp; Atlanta, GA
         </p>
-        <h1 data-animate>Ryan<br />Walker</h1>
-        <p class="lede" data-animate>
+        <h1 data-reveal style="--i:1">Ryan<br />Walker</h1>
+        <p class="lede" data-reveal style="--i:2">
           Third-year CS at Georgia Tech, drawn to work where I own the whole system —
           cloud infrastructure and tooling at Sonatype, and a production options-risk
           platform of my own.
         </p>
-        <div class="cta" data-animate>
+        <div class="cta" data-reveal style="--i:3">
           <a class="btn btn--solid" href="/projects/">View Projects</a>
           <a class="btn" href="/Ryan_Walker_Resume.pdf" download>Résumé ↓</a>
         </div>
       </div>
 
-      <div class="portrait" data-animate>
+      <div class="portrait" data-reveal="right" style="--i:2">
         <Image
           src={headshot}
           alt="Ryan Walker"
@@ -83,8 +85,8 @@ const stats = [
 
     <section class="stats" aria-label="At a glance">
       {
-        stats.map((s) => (
-          <div class="stat" data-animate>
+        stats.map((s, i) => (
+          <div class="stat" data-animate style={`--i:${i}`}>
             <span class:list={['stat-value', s.accent && 'stat-value--accent']}>{s.value}</span>
             <span class="stat-label">{s.label}</span>
           </div>
@@ -101,7 +103,7 @@ const stats = [
       <ul class="cards">
         {
           featured.map((f, i) => (
-            <li data-animate>
+            <li data-animate style={`--i:${i}`}>
               <a class="card" href={f.href}>
                 <div class="card-top">
                   <span class="index">_{String(i + 1).padStart(2, '0')}</span>
@@ -176,7 +178,14 @@ const stats = [
     flex-wrap: wrap;
   }
 
+  /* Outline button: gold wipes in from the left and the label flips to
+     --on-accent, so the two buttons end up reading as the same object. The
+     fill is a ::before behind the text rather than a background transition,
+     because a background cannot be wiped directionally. */
   .btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 12px;
     letter-spacing: 0.08em;
@@ -186,12 +195,33 @@ const stats = [
     padding: 11px 20px;
     border-radius: 2px;
     transition:
-      color 120ms var(--ease-out-soft),
-      border-color 120ms var(--ease-out-soft),
-      background-color 120ms var(--ease-out-soft);
+      color var(--dur-quick) var(--ease-out-soft),
+      border-color var(--dur-quick) var(--ease-out-soft),
+      transform var(--dur-base) var(--ease-out-back);
   }
 
-  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .btn:hover,
+  .btn:focus-visible {
+    border-color: var(--accent);
+    color: var(--on-accent);
+    transform: translateY(-2px);
+  }
+
+  .btn:hover::before,
+  .btn:focus-visible::before { transform: scaleX(1); }
+
+  .btn:active { transform: translateY(0); }
 
   .btn--solid {
     background: var(--accent);
@@ -200,9 +230,20 @@ const stats = [
     font-weight: 600;
   }
 
-  .btn--solid:hover {
+  /* Already gold, so it lifts and brightens instead of filling. */
+  .btn--solid::before { background: color-mix(in srgb, var(--accent) 80%, #fff); }
+
+  .btn--solid:hover,
+  .btn--solid:focus-visible {
     color: var(--on-accent);
-    opacity: 0.88;
+    box-shadow: var(--lift);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    .btn::before { transition-duration: 1ms; }
+    .btn:hover,
+    .btn:focus-visible { transform: none; }
   }
 
   .portrait {
@@ -212,6 +253,14 @@ const stats = [
     border-radius: 3px;
     overflow: hidden;
     background: var(--surface);
+    transition:
+      border-color var(--dur-base) var(--ease-out-soft),
+      box-shadow var(--dur-base) var(--ease-out-soft);
+  }
+
+  .portrait:hover {
+    border-color: var(--accent);
+    box-shadow: var(--lift);
   }
 
   .portrait :global(img) {
@@ -220,6 +269,11 @@ const stats = [
     object-fit: cover;
     object-position: 50% 32%;
     display: block;
+    transition: transform var(--dur-slow) var(--ease-out-soft);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .portrait:hover :global(img) { transform: scale(1.04); }
   }
 
   .stats {
@@ -235,6 +289,16 @@ const stats = [
     display: flex;
     flex-direction: column;
     gap: 5px;
+    transition: transform var(--dur-base) var(--ease-out-back);
+  }
+
+  .stat:hover { transform: translateY(-3px); }
+
+  .stat:hover .stat-value { color: var(--accent); }
+
+  .stat-value,
+  .stat-label {
+    transition: color var(--dur-quick) var(--ease-out-soft);
   }
 
   .stat:first-child {
@@ -280,7 +344,11 @@ const stats = [
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--accent);
+    display: inline-block;
+    transition: transform var(--dur-base) var(--ease-out-back);
   }
+
+  .all:hover { transform: translateX(4px); }
 
   .cards {
     display: grid;
@@ -293,7 +361,6 @@ const stats = [
 
   .card {
     height: 100%;
-    transition: border-color 120ms var(--ease-out-soft);
     background: var(--surface);
     border: 1px solid var(--hairline);
     border-radius: 3px;
@@ -302,10 +369,30 @@ const stats = [
     flex-direction: column;
     gap: 14px;
     min-height: 250px;
+    transition:
+      border-color var(--dur-quick) var(--ease-out-soft),
+      transform var(--dur-base) var(--ease-out-back),
+      box-shadow var(--dur-base) var(--ease-out-soft);
   }
 
-  .card:hover { border-color: var(--accent); }
-  .card:hover h3 { color: var(--accent); }
+  .card:hover,
+  .card:focus-visible {
+    border-color: var(--accent);
+    transform: translateY(-5px);
+    box-shadow: var(--lift);
+  }
+
+  .card:hover h3,
+  .card:focus-visible h3 { color: var(--accent); }
+
+  /* The mono index is the card's tell — it slides with the lift. */
+  .card:hover .index { transform: translateX(3px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: border-color var(--dur-quick) var(--ease-out-soft); }
+    .card:hover,
+    .card:focus-visible { transform: none; }
+  }
 
   .card-top {
     display: flex;
@@ -318,6 +405,8 @@ const stats = [
     font-size: 11px;
     letter-spacing: 0.1em;
     color: var(--accent);
+    display: inline-block;
+    transition: transform var(--dur-base) var(--ease-out-back);
   }
 
   .tag {
@@ -329,7 +418,7 @@ const stats = [
   }
 
   .card h3 {
-    transition: color 120ms var(--ease-out-soft);
+    transition: color var(--dur-quick) var(--ease-out-soft);
     font-weight: 700;
     font-size: 22px;
     letter-spacing: -0.015em;
@@ -358,6 +447,14 @@ const stats = [
     border: 1px solid var(--hairline);
     border-radius: 2px;
     padding: 3px 8px;
+    transition:
+      color var(--dur-quick) var(--ease-out-soft),
+      border-color var(--dur-quick) var(--ease-out-soft);
+  }
+
+  .card:hover .chip {
+    color: var(--prose);
+    border-color: var(--monogram-border);
   }
 
   @media (max-width: 980px) {

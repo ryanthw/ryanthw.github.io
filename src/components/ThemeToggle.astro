@@ -35,12 +35,29 @@
     border-radius: 2px;
     color: var(--muted);
     cursor: pointer;
-    transition: color 120ms var(--ease-out-soft), border-color 120ms var(--ease-out-soft);
+    transition:
+      color var(--dur-quick) var(--ease-out-soft),
+      border-color var(--dur-quick) var(--ease-out-soft),
+      background-color var(--dur-quick) var(--ease-out-soft);
   }
 
   .toggle:hover {
     color: var(--accent);
     border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  .toggle:active { transform: scale(0.92); }
+
+  /* The glyph turns toward the theme you are switching to. */
+  .icon { transition: transform var(--dur-base) var(--ease-out-back); }
+
+  .toggle:hover .icon--sun { transform: rotate(72deg); }
+  .toggle:hover .icon--moon { transform: rotate(-20deg) scale(1.08); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .icon { transition: none; }
+    .toggle:active { transform: none; }
   }
 
   /* Show the icon for the theme you'd switch *to*: sun while dark, moon while
